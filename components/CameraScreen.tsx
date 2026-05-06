@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, CheckCircle } from 'lucide-react';
-import type { CapturedImages } from '@/app/page';
+import type { CapturedImages } from '@/components/type';
 
 type CaptureAngle = 'front' | 'left' | 'right' | 'top';
 
