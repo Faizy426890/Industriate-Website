@@ -1,51 +1,106 @@
 @import "tailwindcss";
 
-:root {
-  --font-geist: "Geist", system-ui, -apple-system, sans-serif;
-  --font-geist-mono: "Geist Mono", ui-monospace, monospace;
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --color-ink-50: #f8fafc;
+  --color-ink-100: #f1f5f9;
+  --color-ink-200: #e2e8f0;
+  --color-ink-300: #cbd5e1;
+  --color-ink-400: #94a3b8;
+  --color-ink-500: #64748b;
+  --color-ink-600: #475569;
+  --color-ink-700: #334155;
+  --color-ink-800: #1e293b;
+  --color-ink-900: #0f172a;
+  --color-ink-950: #020617;
+
+  --color-navy-700: #1e2a44;
+  --color-navy-800: #0f1d36;
+  --color-navy-900: #0a1628;
+  --color-navy-950: #060f1d;
+
+  --color-accent-50: #faf6f0;
+  --color-accent-100: #f3e9d6;
+  --color-accent-200: #e7d2a9;
+  --color-accent-300: #d4b275;
+  --color-accent-400: #c39759;
+  --color-accent-500: #b07f3f;
+  --color-accent-600: #946632;
+  --color-accent-700: #774f29;
+
+  --shadow-soft: 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.06);
+  --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.04), 0 6px 16px -8px rgba(15, 23, 42, 0.10);
+  --shadow-elev: 0 8px 28px -10px rgba(15, 23, 42, 0.18);
 }
 
-*,
-*::before,
-*::after {
+* {
   box-sizing: border-box;
-}
-
-html {
-  -webkit-tap-highlight-color: transparent;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  font-family: var(--font-geist);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overscroll-behavior: none;
 }
 
-/* Prevent layout shift from scrollbar */
 html {
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
   scrollbar-gutter: stable;
 }
 
-/* Video element performance hints */
-video {
-  will-change: transform;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
+  color: #0f172a;
+  font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-feature-settings: "ss01", "cv11";
 }
 
-/* Smooth transitions for all interactive elements */
-button {
-  cursor: pointer;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
+::selection {
+  background: rgba(196, 151, 89, 0.25);
+  color: #0f172a;
 }
 
-/* Remove tap highlight on mobile */
-button,
-a {
+button, a {
   -webkit-tap-highlight-color: transparent;
+}
+
+/* Premium focus ring */
+:where(a, button, input, textarea, select):focus-visible {
+  outline: 2px solid #1e2a44;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Prevent FOUC during page transitions */
+.fade-enter {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+/* Headline tracking */
+.headline {
+  letter-spacing: -0.022em;
+  font-feature-settings: "ss01";
+}
+
+/* Subtle grid backdrop */
+.bg-grid-soft {
+  background-image:
+    linear-gradient(to right, rgba(15, 23, 42, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 23, 42, 0.04) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+/* Lock body scroll when mobile menu open */
+body.no-scroll {
+  overflow: hidden;
+}
+
+/* Reduce motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
 }
