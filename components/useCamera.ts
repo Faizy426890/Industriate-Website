@@ -1,11 +1,13 @@
 "use client";
 
 import { useRef, useState, useCallback, useEffect } from "react";
-import type { UseCameraReturn, CameraError, CameraErrorCode } from "@/lib"
-import { CAMERA_CONSTRAINTS, CAMERA_FALLBACK_CONSTRAINTS } from "@/lib/index2"
+import type { UseCameraReturn, CameraError, CameraErrorCode } from "@/lib";
+import { CAMERA_CONSTRAINTS, CAMERA_FALLBACK_CONSTRAINTS } from "@/lib/index2";
 
 export function useCamera(): UseCameraReturn {
-  const videoRef = useRef<HTMLVideoElement | null>(null);
+  // ✅ FIXED HERE
+  const videoRef = useRef<HTMLVideoElement>(null);
+
   const streamRef = useRef<MediaStream | null>(null);
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [isReady, setIsReady] = useState(false);
@@ -21,13 +23,11 @@ export function useCamera(): UseCameraReturn {
     };
   }, []);
 
-  // ✅ SAFETY EFFECT: CameraView is always in the DOM (hidden via CSS),
-  // so videoRef.current should always be set. But in case there's a race,
-  // this effect watches `stream` state and attaches to the video element
-  // whenever both stream and videoRef are available.
+  // Attach stream when available
   useEffect(() => {
     const video = videoRef.current;
     const mediaStream = streamRef.current;
+
     if (!video || !mediaStream || video.srcObject === mediaStream) return;
 
     video.srcObject = mediaStream;
@@ -36,11 +36,15 @@ export function useCamera(): UseCameraReturn {
 
     const doPlay = () => {
       if (!mountedRef.current) return;
-      void video.play().then(() => {
-        if (mountedRef.current) setIsReady(true);
-      }).catch(() => {
-        if (mountedRef.current) setIsReady(true);
-      });
+
+      void video
+        .play()
+        .then(() => {
+          if (mountedRef.current) setIsReady(true);
+        })
+        .catch(() => {
+          if (mountedRef.current) setIsReady(true);
+        });
     };
 
     if (video.readyState >= 3) {
@@ -50,61 +54,62 @@ export function useCamera(): UseCameraReturn {
     }
   }, [stream]);
 
-  const attachStream = useCallback(
-    (mediaStream: MediaStream) => {
-      if (!mountedRef.current) {
-        releaseStream(mediaStream);
-        return;
-      }
+  const attachStream = useCallback((mediaStream: MediaStream) => {
+    if (!mountedRef.current) {
+      releaseStream(mediaStream);
+      return;
+    }
 
-      streamRef.current = mediaStream;
-      setStream(mediaStream);
+    streamRef.current = mediaStream;
+    setStream(mediaStream);
 
-      // Direct attach attempt (works if CameraView is already mounted)
-      const video = videoRef.current;
-      if (video && video.srcObject !== mediaStream) {
-        video.srcObject = mediaStream;
-        video.muted = true;
-        video.playsInline = true;
+    const video = videoRef.current;
 
-        const doPlay = () => {
-          if (!mountedRef.current) return;
-          void video.play().then(() => {
+    if (video && video.srcObject !== mediaStream) {
+      video.srcObject = mediaStream;
+      video.muted = true;
+      video.playsInline = true;
+
+      const doPlay = () => {
+        if (!mountedRef.current) return;
+
+        void video
+          .play()
+          .then(() => {
             if (mountedRef.current) setIsReady(true);
-          }).catch(() => {
+          })
+          .catch(() => {
             if (mountedRef.current) setIsReady(true);
           });
-        };
+      };
 
-        if (video.readyState >= 3) {
-          doPlay();
-        } else {
-          video.addEventListener("canplay", doPlay, { once: true });
-        }
+      if (video.readyState >= 3) {
+        doPlay();
+      } else {
+        video.addEventListener("canplay", doPlay, { once: true });
       }
-      // If video is null here, the useEffect above will catch it on next render
+    }
 
-      // Handle camera interruption
-      mediaStream.getTracks().forEach((track) => {
-        track.addEventListener("ended", () => {
-          if (mountedRef.current) {
-            setIsReady(false);
-            void attemptReconnect();
-          }
-        });
+    // Handle camera interruption
+    mediaStream.getTracks().forEach((track) => {
+      track.addEventListener("ended", () => {
+        if (mountedRef.current) {
+          setIsReady(false);
+          void attemptReconnect();
+        }
       });
-    },
-    [] // eslint-disable-line react-hooks/exhaustive-deps
-  );
+    });
+  }, []);
 
   const attemptReconnect = useCallback(async () => {
     if (!mountedRef.current || requestingRef.current) return;
     await sleep(1500);
     if (mountedRef.current) await requestPermission();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   const requestPermission = useCallback(async () => {
     if (requestingRef.current) return;
+
     requestingRef.current = true;
     setError(null);
     setIsReady(false);
@@ -116,7 +121,8 @@ export function useCamera(): UseCameraReturn {
     if (!isBrowserSupported()) {
       setError({
         code: "BROWSER_UNSUPPORTED",
-        message: "Your browser does not support camera access. Please use Chrome, Firefox, or Safari 14.1+.",
+        message:
+          "Your browser does not support camera access. Please use Chrome, Firefox, or Safari 14.1+.",
         recoverable: false,
       });
       requestingRef.current = false;
@@ -129,11 +135,15 @@ export function useCamera(): UseCameraReturn {
       setError(null);
     } catch (primaryErr) {
       try {
-        const mediaStream = await getUserMedia(CAMERA_FALLBACK_CONSTRAINTS);
+        const mediaStream = await getUserMedia(
+          CAMERA_FALLBACK_CONSTRAINTS
+        );
         attachStream(mediaStream);
         setError(null);
       } catch (fallbackErr) {
-        const cameraError = parseCameraError(fallbackErr ?? primaryErr);
+        const cameraError = parseCameraError(
+          fallbackErr ?? primaryErr
+        );
         if (mountedRef.current) setError(cameraError);
       }
     }
@@ -146,7 +156,10 @@ export function useCamera(): UseCameraReturn {
     streamRef.current = null;
     setStream(null);
     setIsReady(false);
-    if (videoRef.current) videoRef.current.srcObject = null;
+
+    if (videoRef.current) {
+      videoRef.current.srcObject = null;
+    }
   }, []);
 
   const restart = useCallback(async () => {
@@ -155,12 +168,24 @@ export function useCamera(): UseCameraReturn {
     await requestPermission();
   }, [stop, requestPermission]);
 
-  return { videoRef, stream, isReady, error, requestPermission, stop, restart };
+  return {
+    videoRef,
+    stream,
+    isReady,
+    error,
+    requestPermission,
+    stop,
+    restart,
+  };
 }
 
 function releaseStream(stream: MediaStream | null) {
   if (!stream) return;
-  stream.getTracks().forEach((t) => { try { t.stop(); } catch { /**/ } });
+  stream.getTracks().forEach((t) => {
+    try {
+      t.stop();
+    } catch {}
+  });
 }
 
 function isBrowserSupported(): boolean {
@@ -171,7 +196,9 @@ function isBrowserSupported(): boolean {
   );
 }
 
-async function getUserMedia(constraints: MediaStreamConstraints): Promise<MediaStream> {
+async function getUserMedia(
+  constraints: MediaStreamConstraints
+): Promise<MediaStream> {
   return navigator.mediaDevices.getUserMedia(constraints);
 }
 
@@ -180,18 +207,44 @@ function parseCameraError(err: unknown): CameraError {
     switch (err.name) {
       case "NotAllowedError":
       case "PermissionDeniedError":
-        return { code: "PERMISSION_DENIED", message: "Camera permission was denied. Please allow camera access in your browser settings.", recoverable: false };
+        return {
+          code: "PERMISSION_DENIED",
+          message:
+            "Camera permission was denied. Please allow camera access in your browser settings.",
+          recoverable: false,
+        };
       case "NotFoundError":
       case "DevicesNotFoundError":
-        return { code: "DEVICE_NOT_FOUND", message: "No camera found. Please connect a camera and try again.", recoverable: true };
+        return {
+          code: "DEVICE_NOT_FOUND",
+          message:
+            "No camera found. Please connect a camera and try again.",
+          recoverable: true,
+        };
       case "OverconstrainedError":
-        return { code: "OVERCONSTRAINED", message: "Camera does not meet requirements. Trying with lower settings.", recoverable: true };
+        return {
+          code: "OVERCONSTRAINED",
+          message:
+            "Camera does not meet requirements. Trying with lower settings.",
+          recoverable: true,
+        };
       default:
-        return { code: "UNKNOWN", message: `Camera error: ${err.message}`, recoverable: true };
+        return {
+          code: "UNKNOWN",
+          message: `Camera error: ${err.message}`,
+          recoverable: true,
+        };
     }
   }
+
   const code: CameraErrorCode = "UNKNOWN";
-  return { code, message: "An unexpected camera error occurred. Please try again.", recoverable: true };
+
+  return {
+    code,
+    message:
+      "An unexpected camera error occurred. Please try again.",
+    recoverable: true,
+  };
 }
 
 function sleep(ms: number): Promise<void> {

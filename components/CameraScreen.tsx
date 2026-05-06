@@ -3,8 +3,12 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, CheckCircle } from 'lucide-react';
-import type { CapturedImages } from '@/components/type';
-
+type CapturedImages = {
+  front?: string;
+  left?: string;
+  right?: string;
+  top?: string;
+};
 type CaptureAngle = 'front' | 'left' | 'right' | 'top';
 
 interface Props {
@@ -200,7 +204,7 @@ export default function CameraScreen({ onComplete, onBack }: Props) {
   const streamRef = useRef<MediaStream | null>(null);
 
   const [currentStep, setCurrentStep]             = useState(0);
-  const [captured, setCaptured]                   = useState<CapturedImages>({ front: null, left: null, right: null, top: null });
+const [captured, setCaptured] = useState<CapturedImages>({});
   const [holdProgress, setHoldProgress]           = useState(0);
   const [justCaptured, setJustCaptured]           = useState(false);
   const [cameraReady, setCameraReady]             = useState(false);

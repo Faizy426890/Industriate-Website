@@ -201,7 +201,7 @@ export interface FaceMeshResults {
 // ============================================================
 
 export interface UseCameraReturn {
-  videoRef: React.RefObject<HTMLVideoElement | null>;
+  videoRef: React.RefObject<HTMLVideoElement>; // ✅ FIXED
   stream: MediaStream | null;
   isReady: boolean;
   error: CameraError | null;

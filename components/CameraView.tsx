@@ -5,7 +5,7 @@ import type { ScanState } from "@/lib";
 import { ScanRing } from "@/components/scanring";
 
 interface CameraViewProps {
-  videoRef: React.RefObject<HTMLVideoElement | null>;
+  videoRef: React.RefObject<HTMLVideoElement>;
   isReady: boolean;
   scanState: ScanState;
   mediaPipeLoading: boolean;
