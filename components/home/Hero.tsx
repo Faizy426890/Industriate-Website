@@ -2,163 +2,168 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { ArrowRight, ChevronRight, ShieldCheck, Clock3 } from 'lucide-react';
+import { ArrowRight, Play } from 'lucide-react';
+
+const POSTER =
+  'https://res.cloudinary.com/daxjhteb5/video/upload/so_0,f_auto,q_auto:eco,w_1600,c_limit/v1778628706/Industritas_Hero_Video_1_vgvm1h.jpg';
+
+const VIDEO_MP4 =
+  'https://res.cloudinary.com/daxjhteb5/video/upload/q_auto:eco,f_mp4,vc_h264,w_1600,c_limit/v1778628706/Industritas_Hero_Video_1_vgvm1h.mp4';
+
+const VIDEO_WEBM =
+  'https://res.cloudinary.com/daxjhteb5/video/upload/q_auto:eco,f_webm,vc_vp9,w_1600,c_limit/v1778628706/Industritas_Hero_Video_1_vgvm1h.webm';
 
 export function Hero() {
   const reduce = useReducedMotion();
   const ease = [0.22, 1, 0.36, 1] as const;
+  const [canPlayVideo, setCanPlayVideo] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (reduce) return;
+
+    const mq = window.matchMedia('(min-width: 768px)');
+    const slowConn =
+      // @ts-expect-error – non-standard, present in Chromium
+      (navigator?.connection?.saveData ?? false) ||
+      // @ts-expect-error – non-standard
+      ['slow-2g', '2g'].includes(navigator?.connection?.effectiveType);
+
+    const idle = (cb: () => void) => {
+      const w = window as Window & { requestIdleCallback?: (c: () => void) => number };
+      (w.requestIdleCallback || ((c: () => void) => window.setTimeout(c, 600)))(cb);
+    };
+
+    const apply = () => {
+      if (mq.matches && !slowConn) {
+        idle(() => setCanPlayVideo(true));
+      } else {
+        setCanPlayVideo(false);
+      }
+    };
+
+    apply();
+    mq.addEventListener?.('change', apply);
+    return () => mq.removeEventListener?.('change', apply);
+  }, [reduce]);
 
   return (
-    <section className="relative isolate overflow-hidden bg-white">
-      <div aria-hidden className="absolute inset-0 opacity-[0.4] bg-grid-soft" />
-      <div
-        aria-hidden
-        className="absolute -top-40 -right-32 w-[640px] h-[640px] rounded-full pointer-events-none"
-        style={{
-          background:
-            'radial-gradient(circle at center, rgba(196,151,89,0.10) 0%, rgba(196,151,89,0) 60%)',
-        }}
+    <section className="relative isolate overflow-hidden min-h-[100vh] flex items-center">
+      <Image
+        src={POSTER}
+        alt=""
+        fill
+        priority
+        sizes="100vw"
+        className="absolute inset-0 w-full h-full object-cover"
       />
 
-      <div className="relative mx-auto max-w-7xl px-5 lg:px-8 pt-14 pb-20 lg:pt-20 lg:pb-28">
-        <div className="grid lg:grid-cols-12 gap-10 lg:gap-14 items-center">
-          <div className="lg:col-span-7">
-            <motion.div
-              initial={reduce ? false : { opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, ease }}
-              className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] uppercase text-[var(--color-accent-600)]"
-            >
-              <span aria-hidden className="w-7 h-px bg-[var(--color-accent-500)]/60" />
-              INDUSTRITAS Staffing, LLC
-            </motion.div>
+      {canPlayVideo && (
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="metadata"
+          poster={POSTER}
+          className="absolute inset-0 w-full h-full object-cover motion-safe:animate-[fade-in_700ms_ease-out_both]"
+        >
+          <source src={VIDEO_WEBM} type="video/webm" />
+          <source src={VIDEO_MP4} type="video/mp4" />
+        </video>
+      )}
 
-            <motion.h1
-              initial={reduce ? false : { opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.05, ease }}
-              className="headline mt-5 text-[36px] sm:text-[52px] lg:text-[68px] leading-[1.02] font-semibold text-[var(--color-ink-900)]"
-            >
+      <div className="absolute inset-0 bg-gradient-to-r from-[#020617]/90 via-[#020617]/70 to-[#020617]/40" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#020617]/60 via-transparent to-[#020617]/30" />
+
+      <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 py-28 sm:py-32 lg:py-40 w-full">
+        <div className="max-w-3xl">
+          <motion.div
+            initial={reduce ? false : { opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease }}
+            className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-5 py-2"
+          >
+            <span className="w-2 h-2 rounded-full bg-[var(--color-blue-400)] animate-pulse-soft" />
+            <span className="text-[11px] sm:text-[12px] font-semibold tracking-[0.16em] uppercase text-white/90">
               Workforce Infrastructure
-              <span className="block text-[var(--color-ink-700)]">Built for Scale.</span>
-            </motion.h1>
+            </span>
+          </motion.div>
 
-            <motion.p
-              initial={reduce ? false : { opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.12, ease }}
-              className="mt-6 max-w-xl text-[16.5px] sm:text-[18px] leading-relaxed text-[var(--color-ink-600)]"
+          <motion.h1
+            initial={reduce ? false : { opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.1, ease }}
+            className="headline mt-7 sm:mt-8 text-[34px] sm:text-[52px] lg:text-[72px] leading-[1.04] font-bold text-white"
+          >
+            The Elite Staffing{' '}
+            <span className="text-[var(--color-blue-400)]">Ecosystem.</span>
+            <br />
+            <span className="text-white/90">Healthcare & Industrial.</span>
+            <br />
+            <span className="gradient-text">Built-In.</span>
+          </motion.h1>
+
+          <motion.p
+            initial={reduce ? false : { opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2, ease }}
+            className="mt-6 sm:mt-7 max-w-2xl text-[15.5px] sm:text-[19px] leading-relaxed text-white/80"
+          >
+            We connect great people with great employers. Hospitals find credentialed
+            clinical staff. Plants and refineries find vetted operators, welders, and
+            logistics crews. Hundreds of qualified candidates walk through our doors
+            every day, and our on-site testing center keeps them ready to start.
+          </motion.p>
+
+          <motion.div
+            initial={reduce ? false : { opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3, ease }}
+            className="mt-9 sm:mt-10 flex flex-wrap items-center gap-3 sm:gap-4"
+          >
+            <Link
+              href="/contact?intent=workforce"
+              className="group inline-flex items-center gap-2.5 bg-[var(--color-blue-600)] text-white text-[14.5px] sm:text-[15px] font-semibold px-6 sm:px-7 py-3.5 sm:py-4 rounded-lg hover:bg-[var(--color-blue-700)] shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/30 transition-all duration-300"
             >
-              From sourcing to compliance to global talent coordination — all in one platform.
-              <span className="text-[var(--color-ink-800)] font-medium"> Not a staffing agency. A workforce infrastructure platform.</span>
-            </motion.p>
-
-            <motion.div
-              initial={reduce ? false : { opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.2, ease }}
-              className="mt-9 flex flex-wrap items-center gap-3"
+              Hire workers
+              <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
+            </Link>
+            <Link
+              href="/contact?intent=apply"
+              className="group inline-flex items-center gap-2.5 bg-white/10 backdrop-blur-sm text-white border border-white/25 text-[14.5px] sm:text-[15px] font-semibold px-6 sm:px-7 py-3.5 sm:py-4 rounded-lg hover:bg-white/20 hover:border-white/40 transition-all duration-300"
             >
-              <Link
-                href="/contact?intent=workforce"
-                className="group inline-flex items-center gap-2 bg-[var(--color-navy-900)] text-white text-[14.5px] font-semibold px-5 py-3.5 rounded-md hover:bg-[var(--color-navy-700)] shadow-soft hover:shadow-elev transition-all duration-300"
-              >
-                Request Workforce
-                <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-0.5" />
-              </Link>
-              <Link
-                href="/contact?intent=apply"
-                className="group inline-flex items-center gap-2 bg-white text-[var(--color-ink-900)] border border-[var(--color-ink-300)] text-[14.5px] font-semibold px-5 py-3.5 rounded-md hover:border-[var(--color-ink-900)] hover:bg-[var(--color-ink-50)] transition-all duration-300"
-              >
-                Hire Talent
-                <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-0.5" />
-              </Link>
-              <Link
-                href="/platform"
-                className="inline-flex items-center gap-1.5 text-[14px] font-semibold text-[var(--color-ink-700)] hover:text-[var(--color-ink-900)] px-2 py-2 transition-colors"
-              >
-                Explore solutions
-                <ChevronRight size={15} className="transition-transform duration-300 group-hover:translate-x-0.5" />
-              </Link>
-            </motion.div>
+              <Play size={16} className="fill-white" />
+              Apply for a job
+            </Link>
+          </motion.div>
 
-            <motion.div
-              initial={reduce ? false : { opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.3, ease }}
-              className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-4 max-w-2xl"
-            >
-              <TrustItem value="48h" label="Deployment" />
-              <TrustItem value="100%" label="Compliance-First" />
-              <TrustItem value="4" label="Industries Served" />
-              <TrustItem value="5–10m" label="Response Time" />
-            </motion.div>
-          </div>
-
-          <div className="lg:col-span-5">
-            <motion.div
-              initial={reduce ? false : { opacity: 0, y: 22, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ duration: 0.85, delay: 0.15, ease }}
-              className="relative"
-            >
-              <div className="relative aspect-[4/5] rounded-2xl overflow-hidden shadow-elev border border-[var(--color-ink-200)]">
-                <Image
-                  src="https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=1400&q=80"
-                  alt="Modern enterprise infrastructure"
-                  fill
-                  priority
-                  sizes="(max-width: 1024px) 100vw, 40vw"
-                  className="object-cover"
-                />
-                <div
-                  aria-hidden
-                  className="absolute inset-0 bg-gradient-to-t from-[var(--color-navy-950)]/65 via-[var(--color-navy-950)]/10 to-transparent"
-                />
-                <div className="absolute inset-x-0 bottom-0 p-5">
-                  <div className="rounded-xl border border-white/15 bg-white/[0.07] backdrop-blur-md p-4">
-                    <div className="flex items-center gap-2 text-[10.5px] font-semibold tracking-[0.18em] uppercase text-[var(--color-accent-300)]">
-                      <ShieldCheck size={13} /> Compliance-First Platform
-                    </div>
-                    <p className="mt-2 text-[14px] leading-relaxed text-white">
-                      Pre-vetted, certified, deployment-ready talent — across Industrial, Healthcare,
-                      Skilled Trades, and Logistics.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <motion.div
-                initial={reduce ? false : { opacity: 0, x: -16 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.7, delay: 0.45, ease }}
-                className="absolute -left-3 lg:-left-10 top-12 hidden sm:block"
-              >
-                <div className="rounded-xl border border-[var(--color-ink-200)] bg-white shadow-card p-4 w-[220px]">
-                  <div className="flex items-center gap-2 text-[10.5px] font-semibold tracking-[0.18em] uppercase text-[var(--color-accent-600)]">
-                    <Clock3 size={13} /> 48-Hour Deploy
-                  </div>
-                  <p className="mt-2 text-[13px] leading-relaxed text-[var(--color-ink-700)]">
-                    Request → Match → Compliance → Placement, in under 48 hours.
-                  </p>
-                </div>
-              </motion.div>
-            </motion.div>
-          </div>
+          <motion.div
+            initial={reduce ? false : { opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.45, ease }}
+            className="mt-14 sm:mt-16 grid grid-cols-2 sm:grid-cols-4 gap-5 sm:gap-6 max-w-2xl"
+          >
+            <StatItem value="100+" label="Workers Daily" />
+            <StatItem value="48h" label="Deployment" />
+            <StatItem value="24/7" label="Support" />
+            <StatItem value="100%" label="Compliance" />
+          </motion.div>
         </div>
       </div>
+
+      <div className="absolute bottom-0 left-0 right-0 h-24 sm:h-32 bg-gradient-to-t from-white to-transparent" />
     </section>
   );
 }
 
-function TrustItem({ value, label }: { value: string; label: string }) {
+function StatItem({ value, label }: { value: string; label: string }) {
   return (
-    <div className="border-l border-[var(--color-ink-200)] pl-4">
-      <div className="text-[24px] font-semibold leading-none text-[var(--color-ink-900)] headline">
-        {value}
-      </div>
-      <div className="mt-1.5 text-[11px] font-semibold tracking-[0.16em] uppercase text-[var(--color-ink-500)]">
+    <div className="border-l-2 border-[var(--color-blue-400)]/50 pl-3 sm:pl-4">
+      <div className="text-[24px] sm:text-[28px] font-bold leading-none text-white headline">{value}</div>
+      <div className="mt-1.5 sm:mt-2 text-[10.5px] sm:text-[11px] font-semibold tracking-[0.16em] uppercase text-white/65">
         {label}
       </div>
     </div>

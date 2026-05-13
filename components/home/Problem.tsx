@@ -1,68 +1,86 @@
-import { AlertTriangle, Layers, Clock3, Scale } from 'lucide-react';
+'use client';
+
+import Image from 'next/image';
+import { Users, ShieldAlert, DollarSign } from 'lucide-react';
 import { Container, Section, SectionHeader } from '@/components/site/Section';
 import { Reveal, StaggerGroup, StaggerItem } from '@/components/site/Reveal';
 
 const PAIN_POINTS = [
   {
-    icon: <Layers size={18} />,
-    title: 'Fragmented vendor stack',
+    icon: <Users size={22} />,
+    title: 'Talent is hard to find',
     description:
-      'Hiring a single compliant worker often requires juggling 3–5 vendors — staffing, certification, background, immigration counsel.',
+      'Skilled clinical staff and certified industrial workers are harder to hire, and harder to keep, than ever before.',
+    color: 'bg-red-50 text-red-600 border-red-100',
   },
   {
-    icon: <Clock3 size={18} />,
-    title: 'Slow time-to-deploy',
+    icon: <ShieldAlert size={22} />,
+    title: 'Compliance risk',
     description:
-      'Manual coordination across stakeholders adds days or weeks to every placement, especially for credentialed and visa-track talent.',
+      'Bad paperwork puts your facility or plant at real risk. Regulators, lawsuits, safety incidents. None of it is worth the savings.',
+    color: 'bg-amber-50 text-amber-600 border-amber-100',
   },
   {
-    icon: <Scale size={18} />,
-    title: 'Compliance liability',
+    icon: <DollarSign size={22} />,
+    title: 'Costs that keep growing',
     description:
-      'Documentation gaps, lapsed certifications, and inconsistent vetting expose employers to regulatory and operational risk.',
+      'Travel nurses and short-term contractors are useful, until they become your only option. Budgets break long before the problem does.',
+    color: 'bg-orange-50 text-orange-600 border-orange-100',
   },
 ];
 
 export function Problem() {
   return (
-    <Section tone="white">
-      <Container className="py-20 lg:py-28">
-        <div className="grid lg:grid-cols-12 gap-10 lg:gap-16 items-start">
-          <div className="lg:col-span-5">
+    <Section tone="soft">
+      <Container className="py-20 sm:py-24 lg:py-32">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          <div>
             <SectionHeader
-              eyebrow="The Problem"
-              title="Hiring one compliant worker shouldn't require five vendors."
-              description="Most enterprises stitch together fragmented providers for staffing, certification, background, and immigration. The result: delays, gaps, and risk exposure that scale with every hire."
+              eyebrow="The Challenge"
+              title="Workforce gaps cost more than most teams expect"
+              description="Whether you run a hospital or a refinery, the workforce crunch hits the same way: delayed operations, compliance exposure, and rising costs from short-term fixes that never get permanent."
             />
-            <Reveal delay={0.1}>
-              <div className="mt-8 inline-flex items-center gap-2 text-[12.5px] font-semibold text-[var(--color-accent-700)]">
-                <AlertTriangle size={14} />
-                Vendor fragmentation is the silent tax on workforce velocity.
-              </div>
-            </Reveal>
-          </div>
 
-          <div className="lg:col-span-7">
-            <StaggerGroup className="grid sm:grid-cols-1 gap-3.5">
+            <StaggerGroup className="mt-10 space-y-4">
               {PAIN_POINTS.map((p) => (
                 <StaggerItem key={p.title} direction="up">
-                  <article className="group p-6 rounded-xl border border-[var(--color-ink-200)] bg-white hover:border-[var(--color-ink-300)] hover:shadow-card transition-all duration-500 ease-out hover:-translate-y-0.5">
-                    <div className="flex items-start gap-4">
-                      <div className="flex-none w-10 h-10 rounded-md bg-[var(--color-ink-50)] border border-[var(--color-ink-200)] grid place-items-center text-[var(--color-ink-700)]">
-                        {p.icon}
-                      </div>
-                      <div>
-                        <h3 className="text-[16.5px] font-semibold text-[var(--color-ink-900)]">{p.title}</h3>
-                        <p className="mt-1.5 text-[14px] leading-relaxed text-[var(--color-ink-600)]">
-                          {p.description}
-                        </p>
-                      </div>
+                  <article className="group flex items-start gap-5 p-5 sm:p-6 rounded-2xl bg-white border border-[var(--color-ink-200)] hover:border-[var(--color-blue-200)] hover:shadow-card transition-all duration-500 ease-out hover:-translate-y-0.5">
+                    <div className={`flex-none w-12 h-12 rounded-xl border grid place-items-center ${p.color}`}>
+                      {p.icon}
+                    </div>
+                    <div>
+                      <h3 className="text-[17px] sm:text-[18px] font-semibold text-[var(--color-ink-900)]">{p.title}</h3>
+                      <p className="mt-2 text-[14px] sm:text-[14.5px] leading-relaxed text-[var(--color-ink-600)]">
+                        {p.description}
+                      </p>
                     </div>
                   </article>
                 </StaggerItem>
               ))}
             </StaggerGroup>
           </div>
+
+          <Reveal direction="left">
+            <div className="relative">
+              <div className="relative aspect-[4/5] rounded-2xl overflow-hidden shadow-elev">
+                <Image
+                  src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=1200&q=80"
+                  alt="Workforce challenges in industrial setting"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-navy-950)]/50 via-transparent to-transparent" />
+              </div>
+              <div className="absolute -bottom-6 -left-6 bg-white rounded-2xl p-5 shadow-elev border border-[var(--color-ink-200)] max-w-[240px]">
+                <div className="text-[34px] sm:text-[36px] font-bold text-[var(--color-blue-600)] headline">73%</div>
+                <p className="mt-1 text-[13px] text-[var(--color-ink-600)] leading-relaxed">
+                  of healthcare facilities report critical staffing shortages
+                </p>
+              </div>
+            </div>
+          </Reveal>
         </div>
       </Container>
     </Section>

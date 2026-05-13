@@ -7,7 +7,7 @@ import { Reveal, StaggerGroup, StaggerItem } from '@/components/site/Reveal';
 import { CTASection } from '@/components/site/CTASection';
 
 export const metadata: Metadata = {
-  title: 'Visa Pathways — EB-2 NIW · EB-3 · TN · EB-5',
+  title: 'Visa Pathways · EB-2 NIW, EB-3, TN, EB-5',
   description:
     'INDUSTRITAS coordinates employment-based visa pathways with U.S.-licensed immigration attorneys. We facilitate; counsel handles all legal work.',
 };
@@ -56,7 +56,7 @@ export default function VisaPathwaysPage() {
   return (
     <>
       <PageHero
-        eyebrow="Global Talent · Visa Pathways"
+        eyebrow="Global Talent, Visa Pathways"
         title="Attorney-coordinated immigration support for employers and skilled professionals."
         description="We connect employers and skilled professionals with trusted, U.S.-licensed immigration attorneys to support employment-based visa pathways in a structured and compliant manner. All legal strategy and petition handling are carried out exclusively by licensed counsel."
         crumbs={[{ label: 'Home', href: '/' }, { label: 'Visa Pathways' }]}
@@ -110,7 +110,7 @@ export default function VisaPathwaysPage() {
               <SectionHeader
                 eyebrow="Approved Verbiage"
                 title="The language that defines our role."
-                description="Carefully crafted to position INDUSTRITAS as a coordination platform — not a legal services provider. Used verbatim across all immigration-related communications."
+                description="Wording that keeps our role clear: we coordinate. We are not a legal services provider. Used across every immigration conversation."
               />
               <Reveal delay={0.1}>
                 <div className="mt-8 rounded-xl border border-[var(--color-ink-200)] bg-white p-6">
@@ -182,8 +182,8 @@ export default function VisaPathwaysPage() {
                     Ready to coordinate a visa-track placement?
                   </h3>
                   <p className="mt-3 text-[14.5px] leading-relaxed text-[var(--color-ink-600)] max-w-2xl">
-                    Tell us about the candidate, the role, and the target pathway. We’ll connect employer,
-                    candidate, and licensed counsel — and keep documentation and timelines aligned.
+                    Tell us about the candidate, the role, and the target pathway. We connect
+                    employer, candidate, and licensed counsel, and keep paperwork and timelines on track.
                   </p>
                   <div className="mt-6 flex flex-wrap gap-3">
                     <Link

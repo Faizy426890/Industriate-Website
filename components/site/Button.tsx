@@ -5,19 +5,19 @@ type Variant = 'primary' | 'secondary' | 'ghost' | 'light';
 
 const VARIANTS: Record<Variant, string> = {
   primary:
-    'bg-[var(--color-navy-900)] text-white hover:bg-[var(--color-navy-700)] shadow-soft hover:shadow-elev',
+    'bg-[var(--color-blue-600)] text-white hover:bg-[var(--color-blue-700)] shadow-lg shadow-blue-600/20 hover:shadow-xl',
   secondary:
-    'bg-white text-[var(--color-ink-900)] border border-[var(--color-ink-300)] hover:border-[var(--color-ink-900)] hover:bg-[var(--color-ink-50)]',
+    'bg-white text-[var(--color-ink-900)] border border-[var(--color-ink-300)] hover:border-[var(--color-blue-400)] hover:bg-[var(--color-blue-50)]',
   ghost:
-    'text-[var(--color-ink-700)] hover:text-[var(--color-ink-900)] hover:bg-[var(--color-ink-50)]',
+    'text-[var(--color-ink-700)] hover:text-[var(--color-blue-600)] hover:bg-[var(--color-blue-50)]',
   light:
     'bg-white/10 text-white border border-white/15 hover:bg-white/15 hover:border-white/25 backdrop-blur-md',
 };
 
 const SIZES = {
   sm: 'text-[13px] px-3.5 py-2 rounded-md',
-  md: 'text-[14px] px-4 py-2.5 rounded-md',
-  lg: 'text-[15px] px-5 py-3 rounded-md',
+  md: 'text-[14px] px-4 py-2.5 rounded-lg',
+  lg: 'text-[15px] px-6 py-3.5 rounded-lg',
 };
 
 type CommonProps = {

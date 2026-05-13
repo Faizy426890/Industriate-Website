@@ -5,22 +5,22 @@ import { ServicePage } from '@/components/services/ServicePage';
 export const metadata: Metadata = {
   title: 'Staffing Solutions',
   description:
-    'Industrial workforce, skilled trades, healthcare staffing, and logistics — pre-vetted, certified, and deployment-ready.',
+    'Industrial workforce, skilled trades, healthcare staffing, and logistics. Pre-vetted, certified, ready to deploy.',
 };
 
 export default function StaffingPage() {
   return (
     <ServicePage
-      eyebrow="Services · Staffing Solutions"
+      eyebrow="Services, Staffing Solutions"
       pageName="Staffing Solutions"
-      title="Workforce placement at enterprise scale — across four industries."
-      description="We coordinate workforce placement and immigration support — without providing legal services. Every worker arrives pre-vetted, certified, and deployment-ready."
+      title="Workforce placement at enterprise scale, across four industries."
+      description="We coordinate workforce placement and immigration support, without providing legal services. Every worker arrives pre-vetted, certified, and ready to deploy."
       heroImage="https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?auto=format&fit=crop&w=1600&q=80"
       intro={
         <>
           <p>
             INDUSTRITAS staffing is built around one principle: every worker we place arrives ready to
-            work — credentials verified, documentation complete, and compliance accounted for from day one.
+            work, with credentials verified, paperwork complete, and compliance handled from day one.
           </p>
           <p>
             We staff Industrial, Healthcare, Skilled Trades, and Logistics roles, drawing from local
@@ -52,7 +52,7 @@ export default function StaffingPage() {
           icon: <Truck size={18} />,
           title: 'Logistics & Distribution',
           description:
-            'Warehouse operations, freight handling, and supply chain workforce solutions — built to scale with peak demand.',
+            'Warehouse operations, freight handling, and supply chain workforce, built to scale with peak demand.',
         },
         {
           icon: <Users size={18} />,
@@ -64,7 +64,7 @@ export default function StaffingPage() {
           icon: <Layers size={18} />,
           title: 'Single-Vendor Integration',
           description:
-            'One contract, one platform, one accountable partner — replacing fragmented vendor management entirely.',
+            'One contract, one platform, one accountable partner. Replaces fragmented vendor management entirely.',
         },
       ]}
       outcomes={[

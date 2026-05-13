@@ -14,11 +14,11 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: 'INDUSTRITAS Staffing — A Workforce Infrastructure Platform',
+    default: 'INDUSTRITAS Staffing · A Workforce Infrastructure Platform',
     template: '%s · INDUSTRITAS Staffing',
   },
   description:
-    'Not a staffing agency. A workforce infrastructure platform. Staffing, certification, compliance and immigration coordination — all in one platform.',
+    'Not a staffing agency. A workforce infrastructure platform. Staffing, certification, compliance, and immigration coordination, all in one place.',
   keywords: [
     'workforce infrastructure',
     'staffing platform',
@@ -33,9 +33,9 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'INDUSTRITAS Staffing, LLC' }],
   openGraph: {
-    title: 'INDUSTRITAS Staffing — A Workforce Infrastructure Platform',
+    title: 'INDUSTRITAS Staffing · A Workforce Infrastructure Platform',
     description:
-      'Staffing, certification, compliance and immigration coordination — all in one platform.',
+      'Staffing, certification, compliance, and immigration coordination, all in one place.',
     type: 'website',
   },
 };

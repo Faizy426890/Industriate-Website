@@ -10,7 +10,7 @@ import { CTASection } from '@/components/site/CTASection';
 export const metadata: Metadata = {
   title: 'Industries Served',
   description:
-    'INDUSTRITAS deploys workforce solutions across Industrial, Healthcare, Skilled Trades, and Logistics — all managed inside the platform ecosystem.',
+    'INDUSTRITAS deploys workforce solutions across Industrial, Healthcare, Skilled Trades, and Logistics, all from one platform.',
 };
 
 const INDUSTRIES = [
@@ -82,7 +82,7 @@ export default function IndustriesPage() {
       <PageHero
         eyebrow="Industries Served"
         title="Four verticals. One compliance-first operating model."
-        description="INDUSTRITAS deploys workforce solutions across four core industries. Each vertical has unique compliance requirements, certification standards, and talent profiles — all managed within the platform ecosystem."
+        description="INDUSTRITAS deploys workforce solutions across four core industries. Each one has its own compliance rules, certifications, and talent profile. We handle them all from one platform."
         crumbs={[{ label: 'Home', href: '/' }, { label: 'Industries' }]}
       />
 
@@ -112,7 +112,7 @@ export default function IndustriesPage() {
                       {industry.icon}
                     </div>
                     <span className="text-[11px] font-semibold tracking-[0.18em] uppercase text-[var(--color-accent-600)]">
-                      Vertical · 0{idx + 1}
+                      Vertical 0{idx + 1}
                     </span>
                   </div>
                   <h2 className="headline mt-5 text-[28px] sm:text-[36px] lg:text-[42px] leading-[1.06] font-semibold text-[var(--color-ink-900)]">

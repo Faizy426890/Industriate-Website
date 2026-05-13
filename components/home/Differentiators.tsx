@@ -1,73 +1,92 @@
-import { Zap, ShieldCheck, Globe, Layers } from 'lucide-react';
-import Image from 'next/image';
-import { Container, Section, SectionHeader } from '@/components/site/Section';
-import { StaggerGroup, StaggerItem, Reveal } from '@/components/site/Reveal';
+'use client';
 
-const ITEMS = [
+import Image from 'next/image';
+import { MapPin, Award, Globe } from 'lucide-react';
+import { Container, Section, SectionHeader } from '@/components/site/Section';
+import { Reveal } from '@/components/site/Reveal';
+
+const DIFFERENTIATORS = [
   {
-    icon: <Zap size={18} />,
-    title: '48-Hour Deployment',
-    description: 'From request to placement in under 48 hours, backed by pre-vetted talent pools.',
+    icon: <MapPin size={24} />,
+    title: 'A built-in flow of talent',
+    description:
+      'Our office sits next to a busy TWIC center, so roughly a hundred credentialed workers walk by every day. Nurses, port operators, plant technicians, welders. That is a steady, dual-sector pipeline that other agencies simply cannot copy.',
+    image:
+      'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80',
   },
   {
-    icon: <ShieldCheck size={18} />,
-    title: 'Compliance-First',
-    description: 'Every worker pre-vetted, certified, and deployment-ready — before day one.',
+    icon: <Award size={24} />,
+    title: 'We test and certify on-site',
+    description:
+      "We don't just recruit, we certify. As an authorized Pearson VUE testing center, we host NCLEX and other board exams right inside our doors. Your new healthcare hire arrives compliant and ready to start, faster than any agency can promise.",
+    image:
+      'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=800&q=80',
   },
   {
-    icon: <Globe size={18} />,
-    title: 'Global Talent Access',
-    description: 'International pipeline via attorney-coordinated immigration pathways.',
-  },
-  {
-    icon: <Layers size={18} />,
-    title: 'Multi-Industry Coverage',
-    description: 'Industrial, Healthcare, Skilled Trades, and Logistics — one platform.',
+    icon: <Globe size={24} />,
+    title: 'A global hiring lane',
+    description:
+      'We specialize in EB-2 NIW and TN visa placements for healthcare professionals. We handle the moving parts so you gain long-term clinical talent without the administrative drag.',
+    image:
+      'https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=800&q=80',
   },
 ];
 
 export function Differentiators() {
   return (
-    <Section tone="navy" className="overflow-hidden">
-      <div aria-hidden className="absolute inset-0 opacity-[0.05] bg-grid-soft" />
-      <Container className="relative py-20 lg:py-28">
-        <div className="grid lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-5">
-            <SectionHeader
-              eyebrow="Differentiators"
-              title="Built for enterprise scale."
-              description="Bold, structural advantages that make INDUSTRITAS difficult to replicate — and impossible to match with a traditional staffing agency."
-              tone="dark"
-            />
-            <Reveal delay={0.1}>
-              <div className="mt-8 relative aspect-[4/3] rounded-xl overflow-hidden border border-white/10">
-                <Image
-                  src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=1200&q=80"
-                  alt="Industrial workforce in operations"
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 40vw"
-                  className="object-cover"
-                />
-                <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-[var(--color-navy-950)]/60 to-transparent" />
-              </div>
-            </Reveal>
-          </div>
+    <Section tone="white">
+      <Container className="py-20 sm:py-24 lg:py-32">
+        <SectionHeader
+          eyebrow="Why Choose Us"
+          title="Why employers pick Industritas first"
+          description="Three things no other staffing firm can match, and won't be able to copy any time soon."
+          align="center"
+          className="!mx-auto !text-center"
+        />
 
-          <div className="lg:col-span-7">
-            <StaggerGroup className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-              {ITEMS.map((it) => (
-                <StaggerItem key={it.title}>
-                  <div className="h-full p-6 rounded-xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.05] hover:border-white/15 transition-all duration-500 ease-out hover:-translate-y-1">
-                    <div className="w-10 h-10 rounded-md bg-white/[0.05] border border-white/10 grid place-items-center text-[var(--color-accent-300)]">
-                      {it.icon}
-                    </div>
-                    <h3 className="mt-5 text-[17px] font-semibold text-white">{it.title}</h3>
-                    <p className="mt-2.5 text-[14px] leading-relaxed text-white/65">{it.description}</p>
+        <div className="mt-16 sm:mt-20 space-y-20 lg:space-y-28">
+          {DIFFERENTIATORS.map((d, i) => (
+            <div
+              key={d.title}
+              className={`grid lg:grid-cols-2 gap-10 lg:gap-16 items-center ${
+                i % 2 === 1 ? 'lg:[direction:rtl] lg:*:[direction:ltr]' : ''
+              }`}
+            >
+              <Reveal direction={i % 2 === 0 ? 'right' : 'left'}>
+                <div className="relative">
+                  <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-elev">
+                    <Image
+                      src={d.image}
+                      alt={d.title}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      className="object-cover transition-transform duration-700 hover:scale-105"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-navy-950)]/30 to-transparent" />
                   </div>
-                </StaggerItem>
-              ))}
-            </StaggerGroup>
-          </div>
+                  <div className="absolute -bottom-4 -right-4 w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-[var(--color-blue-600)] grid place-items-center text-white shadow-lg shadow-blue-600/30">
+                    {d.icon}
+                  </div>
+                </div>
+              </Reveal>
+
+              <Reveal direction={i % 2 === 0 ? 'left' : 'right'} delay={0.1}>
+                <div>
+                  <div className="inline-flex items-center gap-2 text-[12px] font-semibold tracking-[0.16em] uppercase text-[var(--color-blue-600)] mb-4">
+                    <span className="w-8 h-px bg-[var(--color-blue-600)]" />
+                    0{i + 1}
+                  </div>
+                  <h3 className="headline text-[26px] sm:text-[34px] font-bold text-[var(--color-ink-900)] leading-tight">
+                    {d.title}
+                  </h3>
+                  <p className="mt-5 text-[15.5px] sm:text-[16px] leading-relaxed text-[var(--color-ink-600)]">
+                    {d.description}
+                  </p>
+                </div>
+              </Reveal>
+            </div>
+          ))}
         </div>
       </Container>
     </Section>

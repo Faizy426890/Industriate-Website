@@ -8,9 +8,9 @@ import { Reveal, StaggerGroup, StaggerItem } from '@/components/site/Reveal';
 import { CTASection } from '@/components/site/CTASection';
 
 export const metadata: Metadata = {
-  title: 'Platform — How It Works',
+  title: 'Platform · How It Works',
   description:
-    'INDUSTRITAS is a fully integrated workforce ecosystem — staffing, certification, compliance, and immigration coordination under one roof.',
+    'INDUSTRITAS is a fully integrated workforce platform: staffing, certification, compliance, and immigration coordination, all in one place.',
 };
 
 const PILLARS = [
@@ -18,7 +18,7 @@ const PILLARS = [
     icon: <Users size={20} />,
     title: 'Staffing',
     description:
-      'Industrial, healthcare, skilled-trades, and logistics talent — sourced through both local and global pipelines, screened against employer specifications.',
+      'Industrial, healthcare, skilled-trades, and logistics talent. Sourced through local and global pipelines, screened against your needs.',
     points: ['Industrial workforce at scale', 'Credentialed healthcare staffing', 'Certified skilled trades', 'Logistics & distribution teams'],
   },
   {
@@ -48,7 +48,7 @@ const PLATFORM_BENEFITS = [
   {
     icon: <Layers size={18} />,
     title: 'One contract',
-    description: 'Replace 3–5 vendors with a single accountable platform partner.',
+    description: 'Replace three to five vendors with one accountable partner.',
   },
   {
     icon: <Zap size={18} />,
@@ -58,7 +58,7 @@ const PLATFORM_BENEFITS = [
   {
     icon: <ShieldCheck size={18} />,
     title: 'Reduced liability',
-    description: 'Compliance is built into placement, not added afterward — every worker arrives audit-ready.',
+    description: 'Compliance is built into placement, not added later. Every worker arrives audit-ready.',
   },
 ];
 
@@ -76,7 +76,7 @@ export default function PlatformPage() {
             href="/contact?intent=workforce"
             className="group inline-flex items-center gap-2 bg-white text-[var(--color-navy-900)] text-[14px] font-semibold px-5 py-3 rounded-md hover:bg-[var(--color-accent-100)] transition-all duration-300"
           >
-            Request Workforce
+            Hire workers
             <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5" />
           </Link>
           <Link
@@ -93,7 +93,7 @@ export default function PlatformPage() {
           <SectionHeader
             eyebrow="The Four Pillars"
             title="Built around the lifecycle of a compliant placement."
-            description="Each pillar maps to a real operational responsibility. None is bolted on — they share data, documentation, and accountability inside one platform."
+            description="Each pillar is a real operational job. Nothing is bolted on. They share data, paperwork, and accountability inside one platform."
             align="center"
             className="!mx-auto !text-center"
           />
@@ -147,7 +147,7 @@ export default function PlatformPage() {
               <SectionHeader
                 eyebrow="Why one platform"
                 title="A single operating system for compliant workforce delivery."
-                description="When staffing, certification, compliance, and immigration share a single source of truth, placements compress from weeks to days — and every worker arrives ready to deploy."
+                description="When staffing, certification, compliance, and immigration share one source of truth, placements drop from weeks to days. And every worker arrives ready to start."
               />
               <StaggerGroup className="mt-9 space-y-3">
                 {PLATFORM_BENEFITS.map((b) => (
@@ -172,7 +172,7 @@ export default function PlatformPage() {
       <CTASection
         eyebrow="Get on the platform"
         title="Ready to replace your fragmented vendor stack?"
-        description="Tell us about your workforce need. Our coordination team responds within 5–10 minutes during business hours."
+        description="Tell us what you need. A coordinator replies within 5 to 10 minutes during business hours."
       />
     </>
   );

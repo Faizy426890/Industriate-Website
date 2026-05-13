@@ -31,7 +31,7 @@ export function PageHero({
         className="absolute -top-32 -right-32 w-[480px] h-[480px] rounded-full"
         style={{
           background:
-            'radial-gradient(circle at center, rgba(196,151,89,0.18) 0%, rgba(196,151,89,0) 60%)',
+            'radial-gradient(circle at center, rgba(37,99,235,0.15) 0%, rgba(37,99,235,0) 60%)',
         }}
       />
       <div
@@ -68,7 +68,7 @@ export function PageHero({
             initial={reduce ? false : { opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, ease }}
-            className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] uppercase text-[var(--color-accent-300)]"
+            className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.18em] uppercase text-[var(--color-blue-400)]"
           >
             <span aria-hidden className="w-7 h-px bg-[var(--color-accent-300)]/60" />
             {eyebrow}

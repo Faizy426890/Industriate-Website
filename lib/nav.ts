@@ -89,8 +89,8 @@ export const COMPANY = {
   short: 'INDUSTRITAS',
   tagline: 'A Workforce Infrastructure Platform',
   positioning: 'Not a staffing agency. A workforce infrastructure platform.',
-  responsePromise: 'We respond within 5–10 minutes.',
+  responsePromise: 'We reply within 5 to 10 minutes.',
   email: 'contact@industritas.com',
   phone: '+1 (555) 010-2240',
-  address: 'Houston, TX · Operating across the United States',
+  address: '1717 Turning Basin Drive Suite 195 Houston TX, USA 77029',
 };

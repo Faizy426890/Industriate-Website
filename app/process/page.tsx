@@ -6,7 +6,7 @@ import { Reveal, StaggerGroup, StaggerItem } from '@/components/site/Reveal';
 import { CTASection } from '@/components/site/CTASection';
 
 export const metadata: Metadata = {
-  title: 'Process — The 5-Step Deployment Workflow',
+  title: 'Process · The 5-Step Deployment Workflow',
   description:
     'From first contact to deployment. The INDUSTRITAS 5-step process: engagement, matching, compliance, immigration coordination, deployment.',
 };
@@ -27,14 +27,14 @@ const STEPS = [
     title: 'Talent Matching',
     short: 'Local & global pipeline',
     description:
-      'We draw from both local and global pipelines to identify the best-fit candidates — pre-screened and aligned to your specifications.',
+      'We tap local and global pipelines to find the best-fit candidates. Pre-screened, and lined up with your needs.',
     bullets: ['Pre-screened talent pools', 'Domestic + international pipelines', 'Spec-aligned candidate slates', 'Cultural and operational fit'],
   },
   {
     n: '03',
     icon: <ShieldCheck size={18} />,
     title: 'Compliance & Documentation',
-    short: 'Certs · medical · background',
+    short: 'Certs, medical, background',
     description:
       'Certifications verified, medical checks completed, background verification processed. Every candidate arrives deployment-ready.',
     bullets: ['Trade and licensure verification', 'Medical and drug screening', 'Background and right-to-work', 'Industry-specific credentials (e.g., TWIC)'],
@@ -45,8 +45,8 @@ const STEPS = [
     title: 'Immigration Coordination',
     short: 'Attorneys handle legal work',
     description:
-      'Licensed attorneys handle all legal work. INDUSTRITAS facilitates communication and documentation between all parties — operating strictly in a non-legal capacity.',
-    bullets: ['Attorney-employer-candidate coordination', 'Document and timeline management', 'Process guidance (non-legal)', 'EB-2 NIW · EB-3 · TN · EB-5 pathways'],
+      'Licensed attorneys handle all legal work. INDUSTRITAS keeps the paperwork and timelines moving between everyone, in a non-legal role.',
+    bullets: ['Attorney, employer, candidate coordination', 'Documents and timeline management', 'Process guidance (non-legal)', 'EB-2 NIW, EB-3, TN, EB-5 pathways'],
   },
   {
     n: '05',
@@ -65,7 +65,7 @@ export default function ProcessPage() {
       <PageHero
         eyebrow="Process"
         title="Five steps. One operational backbone."
-        description="This page is critical for building trust. It shows employers and candidates exactly what to expect — from first contact to deployment. Transparency here reduces friction and accelerates conversion."
+        description="Here is exactly what to expect, from first contact to deployment. Clear steps, no run-around."
         crumbs={[{ label: 'Home', href: '/' }, { label: 'Process' }]}
       />
 
@@ -73,8 +73,8 @@ export default function ProcessPage() {
         <Container className="py-20 lg:py-28">
           <SectionHeader
             eyebrow="The Workflow"
-            title="From request to deployment — managed inside one platform."
-            description="Every step is managed within the platform ecosystem — reducing delays, eliminating vendor fragmentation, and ensuring every placement is compliant from day one."
+            title="From request to deployment, all in one place."
+            description="Every step lives inside the platform. Fewer delays, no vendor handoffs, and every placement compliant from day one."
           />
 
           <div className="mt-14 relative">
@@ -131,8 +131,8 @@ export default function ProcessPage() {
               <span className="font-semibold text-[var(--color-ink-900)]">
                 This end-to-end process is what separates INDUSTRITAS from traditional staffing agencies.
               </span>{' '}
-              Every step is managed within the platform ecosystem — reducing delays, eliminating vendor
-              fragmentation, and ensuring every placement is compliant from day one.
+              Every step lives inside the platform. Fewer delays, no vendor handoffs, and every
+              placement compliant from day one.
             </p>
           </Reveal>
         </Container>

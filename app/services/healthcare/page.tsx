@@ -11,17 +11,17 @@ export const metadata: Metadata = {
 export default function HealthcarePage() {
   return (
     <ServicePage
-      eyebrow="Services · Healthcare Staffing"
+      eyebrow="Services, Healthcare Staffing"
       pageName="Healthcare Staffing"
-      title="Credentialed healthcare talent — placed with compliance documentation in hand."
+      title="Credentialed healthcare talent, ready with paperwork in hand."
       description="Credentialed nurses, allied health professionals, and support staff. Full compliance documentation and licensing verification included on every placement."
       heroImage="https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1600&q=80"
-      ctaLabel="Request Healthcare Staffing"
+      ctaLabel="Hire healthcare staff"
       intro={
         <>
           <p>
-            Healthcare staffing requires the same compliance-first architecture as industrial work — but
-            with denser credentialing, multi-state licensure considerations, and tighter deployment windows.
+            Healthcare staffing needs the same compliance-first approach as industrial work, but with
+            denser credentialing, multi-state licensing concerns, and tighter deployment windows.
           </p>
           <p>
             INDUSTRITAS handles the credentialing layer end-to-end: licenses, immunizations, background
@@ -39,7 +39,7 @@ export default function HealthcarePage() {
         },
         {
           icon: <HeartPulse size={18} />,
-          title: 'Per Diem · Contract · Travel',
+          title: 'Per Diem, Contract, Travel',
           description:
             'Flexible engagement models for short-term, long-term, and travel placements.',
         },
@@ -47,7 +47,7 @@ export default function HealthcarePage() {
           icon: <ClipboardCheck size={18} />,
           title: 'Multi-State Licensure',
           description:
-            'Verification across compact and non-compact states — including endorsement coordination.',
+            'Checks across compact and non-compact states, including endorsement coordination.',
         },
         {
           icon: <ShieldCheck size={18} />,

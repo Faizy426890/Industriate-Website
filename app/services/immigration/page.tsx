@@ -12,9 +12,9 @@ export const metadata: Metadata = {
 export default function ImmigrationPage() {
   return (
     <ServicePage
-      eyebrow="Services · Immigration Coordination"
+      eyebrow="Services, Immigration Coordination"
       pageName="Immigration Coordination"
-      title="Coordination, not counsel — attorney-led visa pathway support."
+      title="Coordination, not counsel. Attorney-led visa pathway support."
       description="We connect employers and skilled professionals with trusted, U.S.-licensed immigration attorneys to support employment-based visa pathways in a structured and compliant manner."
       heroImage="https://images.unsplash.com/photo-1521791136064-7986c2920216?auto=format&fit=crop&w=1600&q=80"
       ctaLabel="Coordinate Visa Pathway"
@@ -22,12 +22,12 @@ export default function ImmigrationPage() {
         <>
           <p>
             INDUSTRITAS facilitates the overall process by coordinating between candidates, employers, and
-            legal counsel — ensuring timelines, documentation, and communication remain efficient and aligned.
+            legal counsel, so timelines, paperwork, and communication stay aligned.
           </p>
           <p>
             Legal strategy and petition handling are carried out exclusively by licensed immigration
             attorneys. We assist with administrative coordination, document preparation support, and
-            general process guidance — strictly in a non-legal capacity.
+            general process guidance, strictly in a non-legal role.
           </p>
         </>
       }
@@ -57,7 +57,7 @@ export default function ImmigrationPage() {
           icon: <MessagesSquare size={18} />,
           title: 'Tri-Party Communication',
           description:
-            'Single point of contact aligning candidate, employer, and attorney — without ever practicing law.',
+            'One point of contact for candidate, employer, and attorney. We never practice law.',
         },
         {
           icon: <FileCheck2 size={18} />,
@@ -75,7 +75,7 @@ export default function ImmigrationPage() {
           icon: <ShieldCheck size={18} />,
           title: 'Compliant Process Guidance',
           description:
-            'General process guidance only — never legal advice. Counsel handles every legal decision.',
+            'General process guidance only, never legal advice. Counsel handles every legal decision.',
         },
         {
           icon: <Scale size={18} />,

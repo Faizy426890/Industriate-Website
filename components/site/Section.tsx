@@ -59,22 +59,20 @@ export function SectionHeader({
   const isDark = tone === 'dark';
   return (
     <div
-      className={`${align === 'center' ? 'text-center mx-auto' : ''} max-w-3xl ${
-        align === 'center' ? '' : ''
-      } ${className}`}
+      className={`${align === 'center' ? 'text-center mx-auto' : ''} max-w-3xl ${className}`}
     >
       {eyebrow && (
         <div
           className={`inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.16em] uppercase ${
-            isDark ? 'text-[var(--color-accent-300)]' : 'text-[var(--color-accent-600)]'
+            isDark ? 'text-[var(--color-blue-400)]' : 'text-[var(--color-blue-600)]'
           }`}
         >
-          <span aria-hidden className={`w-6 h-px ${isDark ? 'bg-[var(--color-accent-300)]/60' : 'bg-[var(--color-accent-500)]/60'}`} />
+          <span aria-hidden className={`w-6 h-px ${isDark ? 'bg-[var(--color-blue-400)]/60' : 'bg-[var(--color-blue-600)]/60'}`} />
           {eyebrow}
         </div>
       )}
       <h2
-        className={`headline mt-4 text-[28px] sm:text-[34px] lg:text-[42px] leading-[1.08] font-semibold ${
+        className={`headline mt-4 text-[28px] sm:text-[36px] lg:text-[44px] leading-[1.08] font-bold ${
           isDark ? 'text-white' : 'text-[var(--color-ink-900)]'
         }`}
       >
@@ -82,7 +80,7 @@ export function SectionHeader({
       </h2>
       {description && (
         <p
-          className={`mt-4 text-[15.5px] sm:text-[16.5px] leading-relaxed ${
+          className={`mt-4 text-[15.5px] sm:text-[17px] leading-relaxed ${
             isDark ? 'text-white/70' : 'text-[var(--color-ink-600)]'
           }`}
         >

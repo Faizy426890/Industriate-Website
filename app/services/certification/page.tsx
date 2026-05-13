@@ -11,17 +11,17 @@ export const metadata: Metadata = {
 export default function CertificationPage() {
   return (
     <ServicePage
-      eyebrow="Services · Certification & Compliance"
+      eyebrow="Services, Certification & Compliance"
       pageName="Certification & Compliance"
-      title="Compliance built into placement — not bolted on after."
+      title="Compliance built into placement, not bolted on after."
       description="Every worker is pre-vetted, certified, and deployment-ready. INDUSTRITAS reduces employer liability through built-in compliance architecture, not optional add-ons."
       heroImage="https://images.unsplash.com/photo-1556157382-97eda2d62296?auto=format&fit=crop&w=1600&q=80"
       intro={
         <>
           <p>
-            Certification and compliance are not separate purchases on the INDUSTRITAS platform — they are
-            structural prerequisites for every placement. Documentation is gathered, verified, and stored
-            before a worker is ever offered a role.
+            Certification and compliance are not separate purchases on the INDUSTRITAS platform. They are
+            built into every placement. Paperwork is gathered, verified, and stored before a worker is
+            offered a role.
           </p>
           <p>
             For employers, this means audit-ready records, lower liability exposure, and zero day-one surprises.
@@ -46,7 +46,7 @@ export default function CertificationPage() {
           icon: <ShieldCheck size={18} />,
           title: 'Background Checks',
           description:
-            'Right-to-work, criminal, employment, and education verification — adapted to industry requirements.',
+            'Right-to-work, criminal, employment, and education verification, adapted to industry needs.',
         },
         {
           icon: <Lock size={18} />,

@@ -17,7 +17,6 @@ export function StickyCTA() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // Hide on contact page (form already there)
   if (pathname === '/contact') return null;
 
   return (
@@ -28,14 +27,14 @@ export function StickyCTA() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
           transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-          className="fixed bottom-5 right-5 z-40 hidden md:block"
+          className="fixed bottom-4 right-4 sm:bottom-5 sm:right-5 z-40"
         >
           <Link
             href="/contact?intent=workforce"
-            className="group inline-flex items-center gap-2.5 bg-[var(--color-navy-900)] text-white text-[13.5px] font-semibold px-5 py-3.5 rounded-full shadow-elev hover:shadow-[0_18px_44px_-16px_rgba(15,23,42,0.55)] hover:bg-[var(--color-navy-700)] transition-all duration-400"
+            className="group inline-flex items-center gap-2 sm:gap-2.5 bg-[var(--color-blue-600)] text-white text-[13px] sm:text-[13.5px] font-semibold px-4 sm:px-5 py-3 sm:py-3.5 rounded-full shadow-lg shadow-blue-600/30 hover:shadow-xl hover:bg-[var(--color-blue-700)] transition-all duration-400"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent-400)] animate-pulse" />
-            Request Workforce
+            <span className="w-1.5 h-1.5 rounded-full bg-blue-300 animate-pulse" />
+            Hire workers
             <ArrowUpRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </Link>
         </motion.div>

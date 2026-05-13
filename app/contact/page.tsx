@@ -8,30 +8,30 @@ import { ContactClient } from './ContactClient';
 import { COMPANY } from '@/lib/nav';
 
 export const metadata: Metadata = {
-  title: 'Contact · Lead Capture',
+  title: 'Contact · Talk to our team',
   description:
-    'Talk to INDUSTRITAS. We respond within 5–10 minutes during business hours. Request workforce, apply, or send a general message.',
+    'Get in touch with INDUSTRITAS. We reply within 5 to 10 minutes during business hours. Hire workers, apply for a job, or send a general message.',
 };
 
 export default function ContactPage() {
   return (
     <>
       <PageHero
-        eyebrow="Contact · Lead Capture"
-        title="Talk to a coordination team member — within minutes."
-        description="Whether you need to mobilize a multi-site workforce, apply as a candidate, or coordinate a visa pathway, this is the front door."
+        eyebrow="Contact"
+        title="Talk to a real person, usually within minutes."
+        description="Looking to hire workers? Reach out and we’ll match the right talent to your role. Looking for a job? Apply and we’ll walk you through the steps."
         crumbs={[{ label: 'Home', href: '/' }, { label: 'Contact' }]}
       >
         <div className="inline-flex items-center gap-2 text-[12.5px] font-semibold text-[var(--color-accent-300)] bg-white/[0.05] border border-white/10 px-3.5 py-2 rounded-full">
           <Clock3 size={13} />
-          We respond within 5–10 minutes during business hours.
+          We reply within 5 to 10 minutes during business hours.
         </div>
       </PageHero>
 
       <Section tone="white">
-        <Container className="py-20 lg:py-28">
-          <div className="grid lg:grid-cols-12 gap-10">
-            <div className="lg:col-span-5">
+        <Container className="py-14 sm:py-20 lg:py-28">
+          <div className="grid lg:grid-cols-12 gap-8 lg:gap-10">
+            <div className="lg:col-span-5 order-2 lg:order-1">
               <Reveal>
                 <div className="space-y-3.5">
                   <ContactBlock
@@ -51,29 +51,33 @@ export default function ContactPage() {
               </Reveal>
 
               <Reveal delay={0.1}>
-                <div className="mt-8 rounded-xl border border-[var(--color-ink-200)] bg-[var(--color-ink-50)] p-6">
+                <div className="mt-8 rounded-2xl border border-[var(--color-ink-200)] bg-[var(--color-ink-50)] p-5 sm:p-6">
                   <div className="text-[11px] font-semibold tracking-[0.18em] uppercase text-[var(--color-accent-600)]">
                     What happens next
                   </div>
-                  <ol className="mt-4 space-y-3 text-[13.5px] text-[var(--color-ink-700)] list-decimal pl-5 marker:text-[var(--color-accent-500)] marker:font-semibold">
-                    <li>Your request is routed to the right coordinator.</li>
-                    <li>We respond within 5–10 minutes during business hours.</li>
-                    <li>Structured intake, scope, and timeline confirmation.</li>
-                    <li>Talent matching and compliance documentation begins.</li>
+                  <ol className="mt-4 space-y-3 text-[13.5px] sm:text-[14px] text-[var(--color-ink-700)] leading-relaxed list-decimal pl-5 marker:text-[var(--color-accent-500)] marker:font-semibold">
+                    <li>Your message is routed to the right coordinator.</li>
+                    <li>We reply within 5 to 10 minutes during business hours.</li>
+                    <li>We confirm scope, timeline, and details with you.</li>
+                    <li>Talent matching and compliance paperwork begin.</li>
                   </ol>
                 </div>
               </Reveal>
 
               <Reveal delay={0.15}>
                 <p className="mt-8 text-[12.5px] leading-relaxed text-[var(--color-ink-500)]">
-                  INDUSTRITAS is not a law firm and does not provide legal advice. Immigration filings are
-                  handled exclusively by U.S.-licensed attorneys.
+                  INDUSTRITAS is not a law firm and does not provide legal advice. Any immigration
+                  filing is handled by independent, U.S.-licensed attorneys.
                 </p>
               </Reveal>
             </div>
 
-            <div className="lg:col-span-7">
-              <Suspense fallback={<div className="h-[600px] rounded-2xl border border-[var(--color-ink-200)] bg-white shadow-card animate-pulse" />}>
+            <div className="lg:col-span-7 order-1 lg:order-2">
+              <Suspense
+                fallback={
+                  <div className="h-[560px] rounded-2xl border border-[var(--color-ink-200)] bg-white shadow-card animate-pulse" />
+                }
+              >
                 <ContactClient />
               </Suspense>
             </div>
@@ -96,7 +100,7 @@ function ContactBlock({
   href?: string;
 }) {
   const inner = (
-    <div className="flex items-start gap-4 p-5 rounded-xl border border-[var(--color-ink-200)] bg-white hover:shadow-card transition-shadow duration-500">
+    <div className="flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl border border-[var(--color-ink-200)] bg-white hover:shadow-card hover:border-[var(--color-blue-200)] transition-all duration-500">
       <div className="flex-none w-10 h-10 rounded-md bg-[var(--color-ink-50)] border border-[var(--color-ink-200)] grid place-items-center text-[var(--color-accent-600)]">
         {icon}
       </div>
@@ -104,10 +108,12 @@ function ContactBlock({
         <div className="text-[10.5px] font-semibold tracking-[0.18em] uppercase text-[var(--color-ink-500)]">
           {label}
         </div>
-        <div className="mt-1 text-[14.5px] font-medium text-[var(--color-ink-900)] truncate">{value}</div>
+        <div className="mt-1 text-[14px] sm:text-[14.5px] font-medium text-[var(--color-ink-900)] break-words">
+          {value}
+        </div>
       </div>
     </div>
   );
-  if (href) return <a href={href}>{inner}</a>;
+  if (href) return <a href={href} className="block">{inner}</a>;
   return inner;
 }

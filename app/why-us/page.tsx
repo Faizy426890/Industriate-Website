@@ -7,9 +7,9 @@ import { Reveal, StaggerGroup, StaggerItem } from '@/components/site/Reveal';
 import { CTASection } from '@/components/site/CTASection';
 
 export const metadata: Metadata = {
-  title: 'Why Us — The 5 Competitive Moats',
+  title: 'Why Us · The 5 Competitive Moats',
   description:
-    'Why INDUSTRITAS is structurally difficult to replicate — five defensible advantages built into the platform model.',
+    'Why INDUSTRITAS is hard to copy. Five real advantages built into the platform model.',
 };
 
 const MOATS = [
@@ -18,7 +18,7 @@ const MOATS = [
     badge: 'Sourcing',
     title: 'TWIC-Driven Talent Funnel',
     description:
-      'Access to Transportation Worker Identification Credential holders creates a pre-qualified pipeline for high-security industrial environments — a rare and defensible sourcing advantage.',
+      'We sit next to a TWIC office, so credentialed industrial workers flow through our doors every day. That pipeline is rare, and tough to copy.',
   },
   {
     icon: <Layers size={18} />,
@@ -46,7 +46,7 @@ const MOATS = [
     badge: 'Coverage',
     title: 'Multi-Industry Capability',
     description:
-      'Industrial, Healthcare, Skilled Trades, and Logistics — diversified demand reduces concentration risk and expands total addressable market.',
+      'Industrial, healthcare, skilled trades, and logistics. Diversified demand lowers concentration risk and grows the market we can serve.',
   },
 ];
 
@@ -89,7 +89,7 @@ export default function WhyUsPage() {
       <PageHero
         eyebrow="Why Us"
         title="Five competitive moats. One workforce platform."
-        description="Why INDUSTRITAS is structurally difficult to replicate. These are not just features — they are defensible competitive advantages built into the operating model."
+        description="Why INDUSTRITAS is hard to copy. These are not just features. They are real advantages built into how we operate."
         crumbs={[{ label: 'Home', href: '/' }, { label: 'Why Us' }]}
       />
 
@@ -130,7 +130,7 @@ export default function WhyUsPage() {
           <SectionHeader
             eyebrow="vs. Traditional Staffing Agencies"
             title="What replacing your fragmented vendor stack actually changes."
-            description="Most agencies stop at sourcing. INDUSTRITAS owns the full workforce lifecycle — from intake to compliance to deployment to immigration coordination."
+            description="Most agencies stop at sourcing. INDUSTRITAS owns the full workforce lifecycle, from intake to compliance to deployment to immigration coordination."
           />
 
           <Reveal delay={0.1}>
@@ -169,7 +169,7 @@ export default function WhyUsPage() {
                 href="/contact?intent=workforce"
                 className="group inline-flex items-center gap-2 bg-[var(--color-navy-900)] text-white text-[14px] font-semibold px-5 py-3 rounded-md hover:bg-[var(--color-navy-700)] transition-colors"
               >
-                Request Workforce
+                Hire workers
                 <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5" />
               </Link>
               <Link

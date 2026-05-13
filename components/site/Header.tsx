@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Menu, X, ChevronRight, ArrowRight } from 'lucide-react';
+import { Menu, X, ChevronRight, ArrowRight, Clock3 } from 'lucide-react';
 import { Logo } from './Logo';
 import { PRIMARY_NAV } from '@/lib/nav';
 
@@ -22,71 +22,86 @@ export function Header() {
   }, []);
 
   useEffect(() => {
-    if (open) document.body.classList.add('no-scroll');
-    else document.body.classList.remove('no-scroll');
-    return () => document.body.classList.remove('no-scroll');
+    if (open) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+    };
   }, [open]);
 
-  // Close mobile menu on route change
   useEffect(() => {
     setOpen(false);
     setActiveMenu(null);
   }, [pathname]);
 
   return (
-    <header
-      className={`sticky top-0 z-50 transition-all duration-500 ease-out ${
-        scrolled
-          ? 'bg-white/85 backdrop-blur-xl border-b border-[var(--color-ink-200)]/70 shadow-[0_1px_0_rgba(15,23,42,0.04)]'
-          : 'bg-white/95 backdrop-blur-md border-b border-transparent'
-      }`}
-    >
-      <div className="mx-auto max-w-7xl px-5 lg:px-8">
-        <div className="flex items-center justify-between h-16 lg:h-[72px]">
-          <Logo />
+    <>
+      <header
+        className={`sticky top-0 z-40 transition-all duration-500 ease-out ${
+          scrolled
+            ? 'bg-white/90 backdrop-blur-xl border-b border-[var(--color-ink-200)]/70 shadow-[0_1px_0_rgba(15,23,42,0.04)]'
+            : 'bg-white/95 backdrop-blur-md border-b border-transparent'
+        }`}
+      >
+        <div className="mx-auto max-w-7xl px-4 sm:px-5 lg:px-8">
+          <div className="flex items-center justify-between h-16 lg:h-[72px] gap-3">
+            <Logo />
 
-          <nav className="hidden lg:flex items-center gap-1" aria-label="Primary">
-            {PRIMARY_NAV.map((group) => (
-              <DesktopNavItem
-                key={group.label}
-                group={group}
-                pathname={pathname}
-                active={activeMenu === group.label}
-                onEnter={() => setActiveMenu(group.label)}
-                onLeave={() => setActiveMenu(null)}
-              />
-            ))}
-          </nav>
+            <nav className="hidden lg:flex items-center gap-1" aria-label="Primary">
+              {PRIMARY_NAV.map((group) => (
+                <DesktopNavItem
+                  key={group.label}
+                  group={group}
+                  pathname={pathname}
+                  active={activeMenu === group.label}
+                  onEnter={() => setActiveMenu(group.label)}
+                  onLeave={() => setActiveMenu(null)}
+                />
+              ))}
+            </nav>
 
-          <div className="hidden lg:flex items-center gap-3">
-            <Link
-              href="/contact"
-              className="inline-flex items-center text-[14px] font-medium text-[var(--color-ink-700)] hover:text-[var(--color-ink-900)] transition-colors px-3 py-2"
+            <div className="hidden lg:flex items-center gap-3">
+              <Link
+                href="/contact"
+                className="inline-flex items-center text-[14px] font-medium text-[var(--color-ink-700)] hover:text-[var(--color-ink-900)] transition-colors px-3 py-2"
+              >
+                Contact
+              </Link>
+              <Link
+                href="/contact?intent=workforce"
+                className="group inline-flex items-center gap-2 bg-[var(--color-blue-600)] text-white text-[14px] font-medium px-4 py-2.5 rounded-lg hover:bg-[var(--color-blue-700)] transition-all duration-300 shadow-lg shadow-blue-600/20 hover:shadow-xl"
+              >
+                Hire workers
+                <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5" />
+              </Link>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setOpen(true)}
+              aria-label="Open menu"
+              aria-expanded={open}
+              className="lg:hidden inline-flex items-center gap-2 h-11 px-3.5 rounded-xl bg-[var(--color-ink-900)] text-white shadow-md hover:bg-[var(--color-ink-800)] active:scale-[0.97] transition-all"
             >
-              Contact
-            </Link>
-            <Link
-              href="/contact?intent=workforce"
-              className="group inline-flex items-center gap-2 bg-[var(--color-navy-900)] text-white text-[14px] font-medium px-4 py-2.5 rounded-md hover:bg-[var(--color-navy-700)] transition-all duration-300 shadow-soft hover:shadow-elev"
-            >
-              Request Workforce
-              <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5" />
-            </Link>
+              <Menu size={18} />
+              <span className="text-[13px] font-semibold tracking-wide">Menu</span>
+            </button>
           </div>
-
-          <button
-            type="button"
-            onClick={() => setOpen(true)}
-            aria-label="Open menu"
-            className="lg:hidden grid place-items-center w-10 h-10 rounded-md border border-[var(--color-ink-200)] text-[var(--color-ink-800)] hover:bg-[var(--color-ink-50)] transition-colors"
-          >
-            <Menu size={18} />
-          </button>
         </div>
-      </div>
+      </header>
 
+      {/* Mobile sidebar rendered outside header so it truly overlays everything */}
       <MobileSidebar open={open} onClose={() => setOpen(false)} pathname={pathname} />
-    </header>
+    </>
   );
 }
 
@@ -180,152 +195,209 @@ function MobileSidebar({
 }) {
   const [openGroup, setOpenGroup] = useState<string | null>(null);
 
+  // Reset open groups when sidebar closes
+  useEffect(() => {
+    if (!open) setOpenGroup(null);
+  }, [open]);
+
   return (
     <AnimatePresence>
       {open && (
         <>
+          {/* Backdrop — must use inline styles for z-index to guarantee it works */}
           <motion.div
             key="backdrop"
-            className="fixed inset-0 z-50 bg-[var(--color-navy-950)]/50 backdrop-blur-sm lg:hidden"
+            style={{ position: 'fixed', inset: 0, zIndex: 9998 }}
+            className="bg-black/60 backdrop-blur-sm lg:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
             onClick={onClose}
+            aria-hidden="true"
           />
+
+          {/* Sidebar panel */}
           <motion.aside
             key="sidebar"
             role="dialog"
             aria-modal="true"
             aria-label="Mobile navigation"
-            className="fixed top-0 right-0 bottom-0 z-50 w-[88%] max-w-[420px] bg-white shadow-2xl lg:hidden flex flex-col"
+            style={{ position: 'fixed', top: 0, right: 0, bottom: 0, zIndex: 9999, width: '85%', maxWidth: '380px' }}
+            className="bg-white shadow-2xl lg:hidden flex flex-col"
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
-            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="flex items-center justify-between h-16 px-5 border-b border-[var(--color-ink-200)]">
+            {/* Header row */}
+            <div className="flex items-center justify-between px-5 border-b border-[var(--color-ink-100)]" style={{ height: '64px', minHeight: '64px' }}>
               <Logo />
               <button
                 type="button"
                 onClick={onClose}
                 aria-label="Close menu"
-                className="grid place-items-center w-10 h-10 rounded-md border border-[var(--color-ink-200)] text-[var(--color-ink-800)] hover:bg-[var(--color-ink-50)] transition-colors"
+                className="grid place-items-center w-9 h-9 rounded-lg bg-[var(--color-ink-100)] text-[var(--color-ink-700)] hover:bg-[var(--color-ink-200)] active:scale-95 transition-all"
               >
-                <X size={18} />
+                <X size={17} />
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto px-5 py-6">
-              <p className="text-[11px] font-semibold tracking-[0.16em] text-[var(--color-ink-400)] uppercase mb-3">
-                Navigate
-              </p>
-              <nav className="flex flex-col" aria-label="Mobile primary">
-                {PRIMARY_NAV.map((group, i) => {
-                  const isOpen = openGroup === group.label;
-                  return (
-                    <motion.div
-                      key={group.label}
-                      initial={{ opacity: 0, x: 12 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.35, delay: 0.05 + i * 0.04, ease: [0.22, 1, 0.36, 1] }}
-                      className="border-b border-[var(--color-ink-100)] last:border-b-0"
-                    >
-                      <div className="flex items-center justify-between">
-                        {group.href ? (
-                          <Link
-                            href={group.href}
-                            className={`flex-1 py-3.5 text-[15px] font-semibold ${
-                              pathname === group.href
-                                ? 'text-[var(--color-ink-900)]'
-                                : 'text-[var(--color-ink-800)]'
-                            }`}
-                          >
-                            {group.label}
-                          </Link>
-                        ) : (
-                          <button
-                            type="button"
-                            onClick={() => setOpenGroup(isOpen ? null : group.label)}
-                            className="flex-1 py-3.5 text-left text-[15px] font-semibold text-[var(--color-ink-800)]"
-                            aria-expanded={isOpen}
-                          >
-                            {group.label}
-                          </button>
-                        )}
-                        <button
-                          type="button"
-                          onClick={() => setOpenGroup(isOpen ? null : group.label)}
-                          aria-label={`Toggle ${group.label}`}
-                          className="grid place-items-center w-9 h-9 text-[var(--color-ink-500)]"
-                        >
-                          <ChevronRight
-                            size={16}
-                            className={`transition-transform duration-300 ${isOpen ? 'rotate-90' : ''}`}
-                          />
-                        </button>
-                      </div>
-                      <AnimatePresence initial={false}>
-                        {isOpen && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: 'auto', opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-                            className="overflow-hidden"
-                          >
-                            <div className="pb-3 pl-1 flex flex-col gap-0.5">
-                              {group.links.map((link) => (
-                                <Link
-                                  key={link.href}
-                                  href={link.href}
-                                  className={`flex items-center justify-between rounded-md px-3 py-2.5 text-[14px] transition-colors ${
-                                    pathname === link.href
-                                      ? 'bg-[var(--color-ink-50)] text-[var(--color-ink-900)] font-medium'
-                                      : 'text-[var(--color-ink-600)] hover:bg-[var(--color-ink-50)] hover:text-[var(--color-ink-900)]'
-                                  }`}
-                                >
-                                  <span>{link.label}</span>
-                                  <ChevronRight size={14} className="text-[var(--color-ink-400)]" />
-                                </Link>
-                              ))}
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </motion.div>
-                  );
-                })}
-              </nav>
+            {/* Scrollable body */}
+            <div className="flex-1 overflow-y-auto overscroll-contain" style={{ WebkitOverflowScrolling: 'touch' }}>
+              <div className="px-5 pt-6 pb-8">
 
-              <div className="mt-8 pt-6 border-t border-[var(--color-ink-100)] space-y-3">
-                <Link
-                  href="/contact?intent=workforce"
-                  className="flex items-center justify-center gap-2 w-full bg-[var(--color-navy-900)] text-white text-[14px] font-semibold px-4 py-3 rounded-md hover:bg-[var(--color-navy-700)] transition-colors"
-                >
-                  Request Workforce <ArrowRight size={14} />
-                </Link>
-                <Link
-                  href="/contact?intent=apply"
-                  className="flex items-center justify-center gap-2 w-full border border-[var(--color-ink-300)] text-[var(--color-ink-800)] text-[14px] font-semibold px-4 py-3 rounded-md hover:bg-[var(--color-ink-50)] transition-colors"
-                >
-                  Apply Now
-                </Link>
-                <Link
-                  href="/contact"
-                  className="flex items-center justify-center gap-2 w-full text-[14px] font-medium text-[var(--color-ink-600)] py-2"
-                >
-                  Contact us
-                </Link>
-              </div>
-
-              <div className="mt-8 rounded-lg bg-[var(--color-ink-50)] border border-[var(--color-ink-200)] p-4">
-                <div className="text-[11px] font-semibold tracking-[0.16em] text-[var(--color-accent-600)] uppercase mb-1.5">
-                  Response Promise
-                </div>
-                <p className="text-[13.5px] text-[var(--color-ink-700)] leading-relaxed">
-                  We respond to inbound workforce requests within <span className="font-semibold text-[var(--color-ink-900)]">5–10 minutes</span>.
+                {/* Section label */}
+                <p className="text-[10.5px] font-bold tracking-[0.2em] text-[var(--color-ink-400)] uppercase mb-2">
+                  Navigate
                 </p>
+
+                {/* Nav groups */}
+                <nav className="flex flex-col divide-y divide-[var(--color-ink-100)]" aria-label="Mobile primary">
+                  {PRIMARY_NAV.map((group, i) => {
+                    const isOpen = openGroup === group.label;
+                    const isCurrentPage = group.href ? pathname.startsWith(group.href) : group.links?.some((l) => pathname === l.href);
+
+                    return (
+                      <motion.div
+                        key={group.label}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.35, delay: 0.05 + i * 0.045, ease: [0.22, 1, 0.36, 1] }}
+                      >
+                        <div className="flex items-center justify-between min-h-[52px]">
+                          {group.href ? (
+                            <Link
+                              href={group.href}
+                              onClick={onClose}
+                              className={`flex-1 py-3.5 text-[15px] font-semibold transition-colors ${
+                                isCurrentPage
+                                  ? 'text-[var(--color-blue-600)]'
+                                  : 'text-[var(--color-ink-800)]'
+                              }`}
+                            >
+                              {group.label}
+                            </Link>
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => setOpenGroup(isOpen ? null : group.label)}
+                              className={`flex-1 py-3.5 text-left text-[15px] font-semibold transition-colors ${
+                                isCurrentPage
+                                  ? 'text-[var(--color-blue-600)]'
+                                  : 'text-[var(--color-ink-800)]'
+                              }`}
+                              aria-expanded={isOpen}
+                            >
+                              {group.label}
+                            </button>
+                          )}
+
+                          {/* Toggle chevron only for groups with sub-links */}
+                          {!group.href && group.links?.length > 0 && (
+                            <button
+                              type="button"
+                              onClick={() => setOpenGroup(isOpen ? null : group.label)}
+                              aria-label={`Toggle ${group.label}`}
+                              className="grid place-items-center w-9 h-9 rounded-lg hover:bg-[var(--color-ink-50)] transition-colors text-[var(--color-ink-400)]"
+                            >
+                              <ChevronRight
+                                size={15}
+                                className={`transition-transform duration-300 ${isOpen ? 'rotate-90' : ''}`}
+                              />
+                            </button>
+                          )}
+                        </div>
+
+                        {/* Sub-links accordion */}
+                        <AnimatePresence initial={false}>
+                          {isOpen && group.links?.length > 0 && (
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: 'auto', opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                              className="overflow-hidden"
+                            >
+                              <div className="pb-3 flex flex-col gap-0.5">
+                                {group.links.map((link) => {
+                                  const isLinkActive = pathname === link.href;
+                                  return (
+                                    <Link
+                                      key={link.href}
+                                      href={link.href}
+                                      onClick={onClose}
+                                      className={`flex items-center justify-between rounded-lg px-3 py-2.5 text-[13.5px] font-medium transition-all ${
+                                        isLinkActive
+                                          ? 'bg-[var(--color-blue-50)] text-[var(--color-blue-700)]'
+                                          : 'text-[var(--color-ink-600)] hover:bg-[var(--color-ink-50)] hover:text-[var(--color-ink-900)]'
+                                      }`}
+                                    >
+                                      <span>{link.label}</span>
+                                      <ChevronRight size={13} className="text-[var(--color-ink-300)]" />
+                                    </Link>
+                                  );
+                                })}
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </motion.div>
+                    );
+                  })}
+                </nav>
+
+                {/* CTA buttons */}
+                <motion.div
+                  className="mt-7 pt-6 border-t border-[var(--color-ink-100)] flex flex-col gap-2.5"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <Link
+                    href="/contact?intent=workforce"
+                    onClick={onClose}
+                    className="flex items-center justify-center gap-2 w-full bg-[var(--color-blue-600)] text-white text-[14px] font-semibold px-4 py-3.5 rounded-xl hover:bg-[var(--color-blue-700)] active:scale-[0.98] transition-all shadow-md shadow-blue-600/25"
+                  >
+                    Hire workers <ArrowRight size={14} />
+                  </Link>
+                  <Link
+                    href="/contact?intent=apply"
+                    onClick={onClose}
+                    className="flex items-center justify-center gap-2 w-full bg-[var(--color-ink-900)] text-white text-[14px] font-semibold px-4 py-3.5 rounded-xl hover:bg-[var(--color-ink-800)] active:scale-[0.98] transition-all"
+                  >
+                    Apply for a job <ArrowRight size={14} />
+                  </Link>
+                  <Link
+                    href="/contact"
+                    onClick={onClose}
+                    className="flex items-center justify-center gap-2 w-full border border-[var(--color-ink-200)] text-[var(--color-ink-700)] text-[14px] font-semibold px-4 py-3 rounded-xl hover:bg-[var(--color-ink-50)] active:scale-[0.98] transition-all"
+                  >
+                    Contact us
+                  </Link>
+                </motion.div>
+
+                {/* Response promise card */}
+                <motion.div
+                  className="mt-5 rounded-xl p-4"
+                  style={{ background: 'var(--color-blue-50)', border: '1px solid var(--color-blue-100)' }}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.32, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <Clock3 size={11} className="text-[var(--color-blue-600)]" />
+                    <span className="text-[10.5px] font-bold tracking-[0.18em] text-[var(--color-blue-700)] uppercase">
+                      Response Promise
+                    </span>
+                  </div>
+                  <p className="text-[13px] text-[var(--color-ink-700)] leading-relaxed">
+                    We reply to new requests within{' '}
+                    <span className="font-semibold text-[var(--color-ink-900)]">5–10 minutes</span>{' '}
+                    during business hours.
+                  </p>
+                </motion.div>
+
               </div>
             </div>
           </motion.aside>

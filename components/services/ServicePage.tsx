@@ -35,7 +35,7 @@ export function ServicePage({
   intro,
   capabilities,
   outcomes,
-  ctaLabel = 'Request Workforce',
+  ctaLabel = 'Hire workers',
   ctaHref = '/contact?intent=workforce',
   callout,
   pageName,
@@ -100,7 +100,7 @@ export function ServicePage({
           <SectionHeader
             eyebrow="Capabilities"
             title="Inside this service line."
-            description="Concrete deliverables — what we coordinate, verify, and stand behind."
+            description="Real deliverables. What we coordinate, verify, and stand behind."
             align="center"
             className="!mx-auto !text-center"
           />
