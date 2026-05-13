@@ -12,7 +12,7 @@ export function Footer() {
       <div className="relative mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 py-14 sm:py-16 lg:py-20">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12">
           <div className="lg:col-span-4">
-            <Logo variant="light" />
+            <Logo />
             <p className="mt-5 text-[14px] sm:text-[14.5px] leading-relaxed text-white/70 max-w-sm">
               {COMPANY.positioning}
             </p>
