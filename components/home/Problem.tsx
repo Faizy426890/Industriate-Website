@@ -61,7 +61,13 @@ export function Problem() {
           </div>
 
           <Reveal direction="left">
-            <div className="relative">
+            {/*
+              Outer wrapper carries the bottom + left padding so the
+              absolutely-positioned stat card is never clipped.
+              pb-8 pl-6 give it exactly the room it needs on all screens.
+            */}
+            <div className="relative pb-8 pl-6">
+              {/* Image */}
               <div className="relative aspect-[4/5] rounded-2xl overflow-hidden shadow-elev">
                 <Image
                   src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=1200&q=80"
@@ -73,7 +79,13 @@ export function Problem() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-navy-950)]/50 via-transparent to-transparent" />
               </div>
-              <div className="absolute -bottom-6 -left-6 bg-white rounded-2xl p-5 shadow-elev border border-[var(--color-ink-200)] max-w-[240px]">
+
+              {/*
+                Stat card — uses positive bottom/left offsets inside the
+                padded wrapper instead of negative offsets that escape it.
+                This way nothing gets clipped regardless of screen size.
+              */}
+              <div className="absolute bottom-0 left-0 bg-white rounded-2xl p-5 shadow-elev border border-[var(--color-ink-200)] max-w-[240px]">
                 <div className="text-[34px] sm:text-[36px] font-bold text-[var(--color-blue-600)] headline">73%</div>
                 <p className="mt-1 text-[13px] text-[var(--color-ink-600)] leading-relaxed">
                   of healthcare facilities report critical staffing shortages

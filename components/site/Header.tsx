@@ -1,17 +1,22 @@
+// components/site/Header.tsx
 'use client';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, X, ChevronRight, ArrowRight, Clock3 } from 'lucide-react';
 import { Logo } from './Logo';
 import { PRIMARY_NAV } from '@/lib/nav';
 
+// ─── Heights must match the header's h-16 / lg:h-[72px] ─────────────────────
+export const HEADER_H_PX    = 64;   // 16 * 4 = 64 px  (h-16)
+export const HEADER_H_LG_PX = 72;   // lg:h-[72px]
+
 export function Header() {
   const pathname = usePathname();
-  const [scrolled, setScrolled] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled]     = useState(false);
+  const [open, setOpen]             = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
 
   useEffect(() => {
@@ -21,20 +26,29 @@ export function Header() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  // ── Body scroll-lock: saves & restores scroll position ──────────────────────
+  const savedScrollY = useRef(0);
   useEffect(() => {
     if (open) {
-      document.body.style.overflow = 'hidden';
-      document.body.style.position = 'fixed';
-      document.body.style.width = '100%';
+      savedScrollY.current = window.scrollY;
+      document.body.style.cssText += `
+        overflow:hidden;
+        position:fixed;
+        top:-${savedScrollY.current}px;
+        width:10%;
+      `;
     } else {
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
+      document.body.style.overflow  = '';
+      document.body.style.position  = '';
+      document.body.style.top       = '';
+      document.body.style.width     = '';
+      window.scrollTo({ top: savedScrollY.current, behavior: 'instant' as ScrollBehavior });
     }
     return () => {
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
+      document.body.style.overflow  = '';
+      document.body.style.position  = '';
+      document.body.style.top       = '';
+      document.body.style.width     = '';
     };
   }, [open]);
 
@@ -45,17 +59,35 @@ export function Header() {
 
   return (
     <>
+      {/*
+        ── FIXED HEADER ─────────────────────────────────────────────────────
+        - `position: fixed` with `inset: '0 0 auto 0'` pins to the top.
+        - `transform: translateZ(0)` has been REMOVED — it created a new
+          stacking context that could fight with `position: fixed` in some
+          browsers, and is no longer needed now that the body flex-child bug
+          is resolved in layout.tsx.
+        - No `will-change: transform` either — that was the original culprit
+          for the initial-render offset in the previous version.
+      */}
       <header
-        className={`sticky top-0 z-40 transition-all duration-500 ease-out ${
+        style={{
+          position: 'fixed',
+          inset: '0 0 auto 0',
+          zIndex: 40,
+          margin: 0,
+        }}
+        className={[
+          'transition-[background-color,border-color,box-shadow] duration-300 ease-out',
           scrolled
-            ? 'bg-white/90 backdrop-blur-xl border-b border-[var(--color-ink-200)]/70 shadow-[0_1px_0_rgba(15,23,42,0.04)]'
-            : 'bg-white/95 backdrop-blur-md border-b border-transparent'
-        }`}
+            ? 'bg-white/95 backdrop-blur-xl border-b border-[var(--color-ink-200)]/60 shadow-sm'
+            : 'bg-white/98 backdrop-blur-md  border-b border-transparent',
+        ].join(' ')}
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-5 lg:px-8">
           <div className="flex items-center justify-between h-16 lg:h-[72px] gap-3">
             <Logo />
 
+            {/* Desktop nav */}
             <nav className="hidden lg:flex items-center gap-1" aria-label="Primary">
               {PRIMARY_NAV.map((group) => (
                 <DesktopNavItem
@@ -78,13 +110,14 @@ export function Header() {
               </Link>
               <Link
                 href="/contact?intent=workforce"
-                className="group inline-flex items-center gap-2 bg-[var(--color-blue-600)] text-white text-[14px] font-medium px-4 py-2.5 rounded-lg hover:bg-[var(--color-blue-700)] transition-all duration-300 shadow-lg shadow-blue-600/20 hover:shadow-xl"
+                className="group inline-flex items-center gap-2 bg-[var(--color-blue-600)] text-white text-[14px] font-medium px-4 py-2.5 rounded-lg hover:bg-[var(--color-blue-700)] transition-all duration-300 shadow-lg shadow-blue-600/20"
               >
                 Hire workers
                 <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5" />
               </Link>
             </div>
 
+            {/* Mobile menu trigger */}
             <button
               type="button"
               onClick={() => setOpen(true)}
@@ -99,12 +132,20 @@ export function Header() {
         </div>
       </header>
 
-      {/* Mobile sidebar rendered outside header so it truly overlays everything */}
+      {/*
+        ── HEIGHT COMPENSATION ──────────────────────────────────────────────────
+        Because the header is `fixed` it's out of normal document flow.
+        This invisible div holds its space so content doesn't hide under it.
+      */}
+      <div className="h-16 lg:h-[72px]" aria-hidden />
+
+      {/* Mobile sidebar */}
       <MobileSidebar open={open} onClose={() => setOpen(false)} pathname={pathname} />
     </>
   );
 }
 
+// ─── Desktop dropdown ─────────────────────────────────────────────────────────
 function DesktopNavItem({
   group,
   pathname,
@@ -118,7 +159,10 @@ function DesktopNavItem({
   onEnter: () => void;
   onLeave: () => void;
 }) {
-  const isActive = group.href ? pathname.startsWith(group.href) : group.links.some((l) => pathname === l.href);
+  const isActive =
+    group.href
+      ? pathname.startsWith(group.href)
+      : group.links.some((l) => pathname === l.href);
 
   return (
     <div className="relative" onMouseEnter={onEnter} onMouseLeave={onLeave}>
@@ -184,6 +228,7 @@ function DesktopNavItem({
   );
 }
 
+// ─── Mobile sidebar ───────────────────────────────────────────────────────────
 function MobileSidebar({
   open,
   onClose,
@@ -195,7 +240,6 @@ function MobileSidebar({
 }) {
   const [openGroup, setOpenGroup] = useState<string | null>(null);
 
-  // Reset open groups when sidebar closes
   useEffect(() => {
     if (!open) setOpenGroup(null);
   }, [open]);
@@ -204,7 +248,7 @@ function MobileSidebar({
     <AnimatePresence>
       {open && (
         <>
-          {/* Backdrop — must use inline styles for z-index to guarantee it works */}
+          {/* Backdrop */}
           <motion.div
             key="backdrop"
             style={{ position: 'fixed', inset: 0, zIndex: 9998 }}
@@ -223,7 +267,15 @@ function MobileSidebar({
             role="dialog"
             aria-modal="true"
             aria-label="Mobile navigation"
-            style={{ position: 'fixed', top: 0, right: 0, bottom: 0, zIndex: 9999, width: '85%', maxWidth: '380px' }}
+            style={{
+              position: 'fixed',
+              top: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: 9999,
+              width: '85%',
+              maxWidth: '380px',
+            }}
             className="bg-white shadow-2xl lg:hidden flex flex-col"
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
@@ -231,7 +283,10 @@ function MobileSidebar({
             transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
           >
             {/* Header row */}
-            <div className="flex items-center justify-between px-5 border-b border-[var(--color-ink-100)]" style={{ height: '64px', minHeight: '64px' }}>
+            <div
+              className="flex items-center justify-between px-5 border-b border-[var(--color-ink-100)] flex-shrink-0"
+              style={{ height: '64px' }}
+            >
               <Logo />
               <button
                 type="button"
@@ -244,19 +299,20 @@ function MobileSidebar({
             </div>
 
             {/* Scrollable body */}
-            <div className="flex-1 overflow-y-auto overscroll-contain" style={{ WebkitOverflowScrolling: 'touch' }}>
-              <div className="px-5 pt-6 pb-8">
+            <div className="flex-1 overflow-y-auto overscroll-contain" style={{ WebkitOverflowScrolling: 'touch' } as React.CSSProperties}>
+              <div className="px-5 pt-6 pb-10">
 
-                {/* Section label */}
                 <p className="text-[10.5px] font-bold tracking-[0.2em] text-[var(--color-ink-400)] uppercase mb-2">
                   Navigate
                 </p>
 
-                {/* Nav groups */}
                 <nav className="flex flex-col divide-y divide-[var(--color-ink-100)]" aria-label="Mobile primary">
                   {PRIMARY_NAV.map((group, i) => {
                     const isOpen = openGroup === group.label;
-                    const isCurrentPage = group.href ? pathname.startsWith(group.href) : group.links?.some((l) => pathname === l.href);
+                    const isCurrentPage =
+                      group.href
+                        ? pathname.startsWith(group.href)
+                        : group.links?.some((l) => pathname === l.href);
 
                     return (
                       <motion.div
@@ -271,9 +327,7 @@ function MobileSidebar({
                               href={group.href}
                               onClick={onClose}
                               className={`flex-1 py-3.5 text-[15px] font-semibold transition-colors ${
-                                isCurrentPage
-                                  ? 'text-[var(--color-blue-600)]'
-                                  : 'text-[var(--color-ink-800)]'
+                                isCurrentPage ? 'text-[var(--color-blue-600)]' : 'text-[var(--color-ink-800)]'
                               }`}
                             >
                               {group.label}
@@ -283,9 +337,7 @@ function MobileSidebar({
                               type="button"
                               onClick={() => setOpenGroup(isOpen ? null : group.label)}
                               className={`flex-1 py-3.5 text-left text-[15px] font-semibold transition-colors ${
-                                isCurrentPage
-                                  ? 'text-[var(--color-blue-600)]'
-                                  : 'text-[var(--color-ink-800)]'
+                                isCurrentPage ? 'text-[var(--color-blue-600)]' : 'text-[var(--color-ink-800)]'
                               }`}
                               aria-expanded={isOpen}
                             >
@@ -293,7 +345,6 @@ function MobileSidebar({
                             </button>
                           )}
 
-                          {/* Toggle chevron only for groups with sub-links */}
                           {!group.href && group.links?.length > 0 && (
                             <button
                               type="button"
@@ -309,7 +360,6 @@ function MobileSidebar({
                           )}
                         </div>
 
-                        {/* Sub-links accordion */}
                         <AnimatePresence initial={false}>
                           {isOpen && group.links?.length > 0 && (
                             <motion.div
@@ -347,7 +397,7 @@ function MobileSidebar({
                   })}
                 </nav>
 
-                {/* CTA buttons */}
+                {/* CTAs */}
                 <motion.div
                   className="mt-7 pt-6 border-t border-[var(--color-ink-100)] flex flex-col gap-2.5"
                   initial={{ opacity: 0, y: 10 }}
@@ -377,7 +427,7 @@ function MobileSidebar({
                   </Link>
                 </motion.div>
 
-                {/* Response promise card */}
+                {/* Response promise */}
                 <motion.div
                   className="mt-5 rounded-xl p-4"
                   style={{ background: 'var(--color-blue-50)', border: '1px solid var(--color-blue-100)' }}

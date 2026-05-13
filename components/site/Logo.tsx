@@ -18,8 +18,8 @@ export function Logo({ className = '' }: Props) {
       <Image
         src={LOGO_SRC}
         alt=""
-        width={130}
-        height={130}
+        width={120}
+        height={115}
         priority
         className="block h-auto w-auto"
       />

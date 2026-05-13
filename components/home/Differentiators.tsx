@@ -35,7 +35,7 @@ const DIFFERENTIATORS = [
 export function Differentiators() {
   return (
     <Section tone="white">
-      <Container className="py-20 sm:py-24 lg:py-32">
+      <Container className="py-12 sm:py-24 lg:py-32">
         <SectionHeader
           eyebrow="Why Choose Us"
           title="Why employers pick Industritas first"

@@ -49,10 +49,25 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className="bg-white text-[var(--color-ink-900)] min-h-screen flex flex-col">
+      {/*
+        ── KEY FIX ────────────────────────────────────────────────────────────
+        Removed `flex flex-col` from <body>. When the fixed <Header> was a
+        flex child of <body>, browsers resolved the flex layout first on the
+        initial paint — briefly placing the header in document flow and making
+        it scroll with the page until the first scroll event fired.
+
+        <Header> now lives outside any flex container so `position: fixed` is
+        resolved unconditionally from the very first paint.
+
+        The `flex flex-col min-h-screen` wrapper is kept on the inner <div>
+        that wraps <main> + <Footer>, preserving the sticky-footer behaviour.
+      */}
+      <body className="bg-white text-[var(--color-ink-900)] min-h-screen">
         <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <div className="flex flex-col min-h-screen">
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </div>
         <StickyCTA />
       </body>
     </html>
