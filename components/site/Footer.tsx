@@ -1,9 +1,52 @@
+'use client';
+
 import Link from 'next/link';
 import { Mail, Phone, MapPin, ShieldCheck } from 'lucide-react';
 import { Logo } from './Logo';
-import { COMPANY, FOOTER_NAV } from '@/lib/nav';
+import { COMPANY } from '@/lib/nav';
+import { useLanguage } from './LanguageProvider';
 
 export function Footer() {
+  const { t } = useLanguage();
+
+  const footerNav = [
+    {
+      title: t.footer.colPlatform,
+      links: [
+        { label: t.footer.howItWorks, href: '/platform' },
+        { label: t.footer.process, href: '/process' },
+        { label: t.footer.whyUs, href: '/why-us' },
+        { label: t.footer.industries, href: '/industries' },
+      ],
+    },
+    {
+      title: t.footer.colServices,
+      links: [
+        { label: t.footer.staffing, href: '/services/staffing' },
+        { label: t.footer.immigration, href: '/services/immigration' },
+        { label: t.footer.certification, href: '/services/certification' },
+        { label: t.footer.healthcare, href: '/services/healthcare' },
+      ],
+    },
+    {
+      title: t.footer.colAudience,
+      links: [
+        { label: t.footer.forEmployers, href: '/for-employers' },
+        { label: t.footer.forCandidates, href: '/for-candidates' },
+        { label: t.footer.visaPathways, href: '/visa-pathways' },
+        { label: t.footer.contact, href: '/contact' },
+      ],
+    },
+    {
+      title: t.footer.colLegal,
+      links: [
+        { label: t.footer.compliance, href: '/compliance' },
+        { label: t.footer.privacy, href: '/compliance#privacy' },
+        { label: t.footer.terms, href: '/compliance#terms' },
+      ],
+    },
+  ];
+
   return (
     <footer className="bg-[var(--color-navy-950)] text-white relative overflow-hidden">
       <div aria-hidden className="absolute inset-0 opacity-[0.06] bg-grid-soft" />
@@ -17,18 +60,18 @@ export function Footer() {
               {COMPANY.positioning}
             </p>
             <p className="mt-3 text-[13px] sm:text-[13.5px] leading-relaxed text-white/55 max-w-sm">
-              Staffing, certification, compliance, and immigration coordination. All in one place.
+              {t.footer.tagline}
             </p>
 
             <div className="mt-7 sm:mt-8 space-y-3 text-[13.5px]">
-              <FooterContact icon={<Mail size={14} />} label="Email" value={COMPANY.email} href={`mailto:${COMPANY.email}`} />
-              <FooterContact icon={<Phone size={14} />} label="Phone" value={COMPANY.phone} href={`tel:${COMPANY.phone.replace(/\s|\(|\)|-/g, '')}`} />
-              <FooterContact icon={<MapPin size={14} />} label="Office" value={COMPANY.address} />
+              <FooterContact icon={<Mail size={14} />} label={t.footer.email} value={COMPANY.email} href={`mailto:${COMPANY.email}`} />
+              <FooterContact icon={<Phone size={14} />} label={t.footer.phone} value={COMPANY.phone} href={`tel:${COMPANY.phone.replace(/\s|\(|\)|-/g, '')}`} />
+              <FooterContact icon={<MapPin size={14} />} label={t.footer.office} value={COMPANY.address} />
             </div>
           </div>
 
           <div className="lg:col-span-8 grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
-            {FOOTER_NAV.map((column) => (
+            {footerNav.map((column) => (
               <div key={column.title}>
                 <h4 className="text-[11.5px] font-semibold tracking-[0.18em] uppercase text-white/50 mb-4">
                   {column.title}
@@ -56,13 +99,11 @@ export function Footer() {
               <ShieldCheck size={16} />
             </div>
             <div className="flex-1">
-              <h5 className="text-[13.5px] font-semibold text-white">Legal & Service Disclaimer</h5>
+              <h5 className="text-[13.5px] font-semibold text-white">{t.footer.disclaimerTitle}</h5>
               <p className="mt-1.5 text-[12.5px] leading-relaxed text-white/65">
-                INDUSTRITAS is not a law firm and does not provide legal advice or legal services. Any
-                immigration matter is handled by independent, U.S.-licensed immigration attorneys. Our
-                role is limited to staffing services and non-legal administrative coordination.{' '}
+                {t.footer.disclaimerBody}{' '}
                 <Link href="/compliance" className="text-white/80 underline-offset-4 hover:underline">
-                  Read full disclaimer
+                  {t.shared.readDisclaimer}
                 </Link>
                 .
               </p>
@@ -72,10 +113,10 @@ export function Footer() {
 
         <div className="mt-8 sm:mt-10 flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4">
           <p className="text-[12.5px] text-white/50">
-            © {new Date().getFullYear()} {COMPANY.name}. All rights reserved.
+            © {new Date().getFullYear()} {COMPANY.name}. {t.footer.allRights}
           </p>
           <p className="text-[11px] tracking-[0.16em] uppercase text-white/40">
-            A Workforce Infrastructure Platform
+            {t.footer.taglineFooter}
           </p>
         </div>
       </div>

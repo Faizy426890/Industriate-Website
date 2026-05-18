@@ -5,19 +5,63 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Menu, X, ChevronRight, ArrowRight, Clock3 } from 'lucide-react';
+import { Menu, X, ChevronRight, ArrowRight, Clock3, Globe } from 'lucide-react';
 import { Logo } from './Logo';
-import { PRIMARY_NAV } from '@/lib/nav';
+import { useLanguage } from './LanguageProvider';
 
 // ─── Heights must match the header's h-16 / lg:h-[72px] ─────────────────────
-export const HEADER_H_PX    = 64;   // 16 * 4 = 64 px  (h-16)
-export const HEADER_H_LG_PX = 72;   // lg:h-[72px]
+export const HEADER_H_PX    = 64;
+export const HEADER_H_LG_PX = 72;
+
+// Build PRIMARY_NAV dynamically from translations
+function buildNav(t: ReturnType<typeof useLanguage>['t']) {
+  return [
+    {
+      label: t.nav.platform,
+      href: '/platform',
+      links: [
+        { label: t.nav.howItWorks, href: '/platform', description: t.nav.howItWorksDesc },
+        { label: t.nav.process, href: '/process', description: t.nav.processDesc },
+        { label: t.nav.whyUs, href: '/why-us', description: t.nav.whyUsDesc },
+      ],
+    },
+    {
+      label: t.nav.services,
+      href: undefined as string | undefined,
+      links: [
+        { label: t.nav.staffing, href: '/services/staffing', description: t.nav.staffingDesc },
+        { label: t.nav.immigration, href: '/services/immigration', description: t.nav.immigrationDesc },
+        { label: t.nav.certification, href: '/services/certification', description: t.nav.certificationDesc },
+        { label: t.nav.healthcare, href: '/services/healthcare', description: t.nav.healthcareDesc },
+      ],
+    },
+    {
+      label: t.nav.industries,
+      href: '/industries',
+      links: [
+        { label: t.nav.industriesServed, href: '/industries', description: t.nav.industriesServedDesc },
+        { label: t.nav.visaPathways, href: '/visa-pathways', description: t.nav.visaPathwaysDesc },
+      ],
+    },
+    {
+      label: t.nav.audiences,
+      href: undefined as string | undefined,
+      links: [
+        { label: t.nav.forEmployers, href: '/for-employers', description: t.nav.forEmployersDesc },
+        { label: t.nav.forCandidates, href: '/for-candidates', description: t.nav.forCandidatesDesc },
+      ],
+    },
+  ];
+}
 
 export function Header() {
   const pathname = usePathname();
+  const { t, toggle, lang } = useLanguage();
   const [scrolled, setScrolled]     = useState(false);
   const [open, setOpen]             = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
+
+  const PRIMARY_NAV = buildNav(t);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -26,7 +70,6 @@ export function Header() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  // ── Body scroll-lock: saves & restores scroll position ──────────────────────
   const savedScrollY = useRef(0);
   useEffect(() => {
     if (open) {
@@ -59,16 +102,6 @@ export function Header() {
 
   return (
     <>
-      {/*
-        ── FIXED HEADER ─────────────────────────────────────────────────────
-        - `position: fixed` with `inset: '0 0 auto 0'` pins to the top.
-        - `transform: translateZ(0)` has been REMOVED — it created a new
-          stacking context that could fight with `position: fixed` in some
-          browsers, and is no longer needed now that the body flex-child bug
-          is resolved in layout.tsx.
-        - No `will-change: transform` either — that was the original culprit
-          for the initial-render offset in the previous version.
-      */}
       <header
         style={{
           position: 'fixed',
@@ -102,17 +135,28 @@ export function Header() {
             </nav>
 
             <div className="hidden lg:flex items-center gap-3">
+              {/* Language toggle */}
+              <button
+                type="button"
+                onClick={toggle}
+                aria-label={`Switch to ${lang === 'en' ? 'Spanish' : 'English'}`}
+                className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[var(--color-ink-600)] hover:text-[var(--color-ink-900)] transition-colors px-2 py-1.5 rounded-md hover:bg-[var(--color-ink-50)]"
+              >
+                <Globe size={14} />
+                {t.shared.switchLang}
+              </button>
+
               <Link
                 href="/contact"
                 className="inline-flex items-center text-[14px] font-medium text-[var(--color-ink-700)] hover:text-[var(--color-ink-900)] transition-colors px-3 py-2"
               >
-                Contact
+                {t.nav.contact}
               </Link>
               <Link
                 href="/contact?intent=workforce"
                 className="group inline-flex items-center gap-2 bg-[var(--color-blue-600)] text-white text-[14px] font-medium px-4 py-2.5 rounded-lg hover:bg-[var(--color-blue-700)] transition-all duration-300 shadow-lg shadow-blue-600/20"
               >
-                Hire workers
+                {t.shared.hireWorkers}
                 <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-0.5" />
               </Link>
             </div>
@@ -121,25 +165,19 @@ export function Header() {
             <button
               type="button"
               onClick={() => setOpen(true)}
-              aria-label="Open menu"
+              aria-label={t.header.openMenu}
               aria-expanded={open}
               className="lg:hidden inline-flex items-center gap-2 h-11 px-3.5 rounded-xl bg-[var(--color-ink-900)] text-white shadow-md hover:bg-[var(--color-ink-800)] active:scale-[0.97] transition-all"
             >
               <Menu size={18} />
-              <span className="text-[13px] font-semibold tracking-wide">Menu</span>
+              <span className="text-[13px] font-semibold tracking-wide">{t.header.menu}</span>
             </button>
           </div>
         </div>
       </header>
 
-      {/*
-        ── HEIGHT COMPENSATION ──────────────────────────────────────────────────
-        Because the header is `fixed` it's out of normal document flow.
-        This invisible div holds its space so content doesn't hide under it.
-      */}
       <div className="h-16 lg:h-[72px]" aria-hidden />
 
-      {/* Mobile sidebar */}
       <MobileSidebar open={open} onClose={() => setOpen(false)} pathname={pathname} />
     </>
   );
@@ -153,7 +191,7 @@ function DesktopNavItem({
   onEnter,
   onLeave,
 }: {
-  group: (typeof PRIMARY_NAV)[number];
+  group: ReturnType<typeof buildNav>[number];
   pathname: string;
   active: boolean;
   onEnter: () => void;
@@ -238,6 +276,8 @@ function MobileSidebar({
   onClose: () => void;
   pathname: string;
 }) {
+  const { t, toggle, lang } = useLanguage();
+  const PRIMARY_NAV = buildNav(t);
   const [openGroup, setOpenGroup] = useState<string | null>(null);
 
   useEffect(() => {
@@ -288,14 +328,25 @@ function MobileSidebar({
               style={{ height: '64px' }}
             >
               <Logo />
-              <button
-                type="button"
-                onClick={onClose}
-                aria-label="Close menu"
-                className="grid place-items-center w-9 h-9 rounded-lg bg-[var(--color-ink-100)] text-[var(--color-ink-700)] hover:bg-[var(--color-ink-200)] active:scale-95 transition-all"
-              >
-                <X size={17} />
-              </button>
+              <div className="flex items-center gap-2">
+                {/* Language toggle */}
+                <button
+                  type="button"
+                  onClick={toggle}
+                  className="inline-flex items-center gap-1 text-[12px] font-semibold text-[var(--color-ink-600)] hover:text-[var(--color-ink-900)] px-2 py-1.5 rounded-md hover:bg-[var(--color-ink-50)] transition-all"
+                >
+                  <Globe size={13} />
+                  {t.shared.switchLang}
+                </button>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  aria-label={t.header.closeMenu}
+                  className="grid place-items-center w-9 h-9 rounded-lg bg-[var(--color-ink-100)] text-[var(--color-ink-700)] hover:bg-[var(--color-ink-200)] active:scale-95 transition-all"
+                >
+                  <X size={17} />
+                </button>
+              </div>
             </div>
 
             {/* Scrollable body */}
@@ -303,7 +354,7 @@ function MobileSidebar({
               <div className="px-5 pt-6 pb-10">
 
                 <p className="text-[10.5px] font-bold tracking-[0.2em] text-[var(--color-ink-400)] uppercase mb-2">
-                  Navigate
+                  {t.header.navigate}
                 </p>
 
                 <nav className="flex flex-col divide-y divide-[var(--color-ink-100)]" aria-label="Mobile primary">
@@ -409,21 +460,21 @@ function MobileSidebar({
                     onClick={onClose}
                     className="flex items-center justify-center gap-2 w-full bg-[var(--color-blue-600)] text-white text-[14px] font-semibold px-4 py-3.5 rounded-xl hover:bg-[var(--color-blue-700)] active:scale-[0.98] transition-all shadow-md shadow-blue-600/25"
                   >
-                    Hire workers <ArrowRight size={14} />
+                    {t.shared.hireWorkers} <ArrowRight size={14} />
                   </Link>
                   <Link
                     href="/contact?intent=apply"
                     onClick={onClose}
                     className="flex items-center justify-center gap-2 w-full bg-[var(--color-ink-900)] text-white text-[14px] font-semibold px-4 py-3.5 rounded-xl hover:bg-[var(--color-ink-800)] active:scale-[0.98] transition-all"
                   >
-                    Apply for a job <ArrowRight size={14} />
+                    {t.shared.applyJob} <ArrowRight size={14} />
                   </Link>
                   <Link
                     href="/contact"
                     onClick={onClose}
                     className="flex items-center justify-center gap-2 w-full border border-[var(--color-ink-200)] text-[var(--color-ink-700)] text-[14px] font-semibold px-4 py-3 rounded-xl hover:bg-[var(--color-ink-50)] active:scale-[0.98] transition-all"
                   >
-                    Contact us
+                    {t.shared.contactUs}
                   </Link>
                 </motion.div>
 
@@ -438,13 +489,13 @@ function MobileSidebar({
                   <div className="flex items-center gap-2 mb-1.5">
                     <Clock3 size={11} className="text-[var(--color-blue-600)]" />
                     <span className="text-[10.5px] font-bold tracking-[0.18em] text-[var(--color-blue-700)] uppercase">
-                      Response Promise
+                      {t.header.responsePromise}
                     </span>
                   </div>
                   <p className="text-[13px] text-[var(--color-ink-700)] leading-relaxed">
-                    We reply to new requests within{' '}
-                    <span className="font-semibold text-[var(--color-ink-900)]">5–10 minutes</span>{' '}
-                    during business hours.
+                    {t.header.responsePromiseBody}{' '}
+                    <span className="font-semibold text-[var(--color-ink-900)]">{t.header.responsePromiseBold}</span>{' '}
+                    {t.header.responsePromiseSuffix}
                   </p>
                 </motion.div>
 

@@ -4,6 +4,7 @@ import './globals.css';
 import { Header } from '@/components/site/Header';
 import { Footer } from '@/components/site/Footer';
 import { StickyCTA } from '@/components/site/StickyCTA';
+import { LanguageProvider } from '@/components/site/LanguageProvider';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -63,12 +64,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         that wraps <main> + <Footer>, preserving the sticky-footer behaviour.
       */}
       <body className="bg-white text-[var(--color-ink-900)] min-h-screen">
-        <Header />
-        <div className="flex flex-col min-h-screen">
-          <main className="flex-1">{children}</main>
-          <Footer />
-        </div>
-        <StickyCTA />
+        <LanguageProvider>
+          <Header />
+          <div className="flex flex-col min-h-screen">
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </div>
+          <StickyCTA />
+        </LanguageProvider>
       </body>
     </html>
   );

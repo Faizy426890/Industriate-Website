@@ -4,48 +4,32 @@ import Image from 'next/image';
 import { MapPin, Award, Globe } from 'lucide-react';
 import { Container, Section, SectionHeader } from '@/components/site/Section';
 import { Reveal } from '@/components/site/Reveal';
+import { useLanguage } from '@/components/site/LanguageProvider';
 
-const DIFFERENTIATORS = [
-  {
-    icon: <MapPin size={24} />,
-    title: 'A built-in flow of talent',
-    description:
-      'Our office sits next to a busy TWIC center, so roughly a hundred credentialed workers walk by every day. Nurses, port operators, plant technicians, welders. That is a steady, dual-sector pipeline that other agencies simply cannot copy.',
-    image:
-      'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    icon: <Award size={24} />,
-    title: 'We test and certify on-site',
-    description:
-      "We don't just recruit, we certify. As an authorized Pearson VUE testing center, we host NCLEX and other board exams right inside our doors. Your new healthcare hire arrives compliant and ready to start, faster than any agency can promise.",
-    image:
-      'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    icon: <Globe size={24} />,
-    title: 'A global hiring lane',
-    description:
-      'We specialize in EB-2 NIW and TN visa placements for healthcare professionals. We handle the moving parts so you gain long-term clinical talent without the administrative drag.',
-    image:
-      'https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=800&q=80',
-  },
+const IMAGES = [
+  'https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=800&q=80',
 ];
+const ICONS = [<MapPin size={24} key="m" />, <Award size={24} key="a" />, <Globe size={24} key="g" />];
 
 export function Differentiators() {
+  const { t } = useLanguage();
+  const items = t.differentiators.items;
+
   return (
     <Section tone="white">
       <Container className="py-12 sm:py-24 lg:py-32">
         <SectionHeader
-          eyebrow="Why Choose Us"
-          title="Why employers pick Industritas first"
-          description="Three things no other staffing firm can match, and won't be able to copy any time soon."
+          eyebrow={t.differentiators.eyebrow}
+          title={t.differentiators.title}
+          description={t.differentiators.description}
           align="center"
           className="!mx-auto !text-center"
         />
 
         <div className="mt-16 sm:mt-20 space-y-20 lg:space-y-28">
-          {DIFFERENTIATORS.map((d, i) => (
+          {items.map((d, i) => (
             <div
               key={d.title}
               className={`grid lg:grid-cols-2 gap-10 lg:gap-16 items-center ${
@@ -56,7 +40,7 @@ export function Differentiators() {
                 <div className="relative">
                   <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-elev">
                     <Image
-                      src={d.image}
+                      src={IMAGES[i]}
                       alt={d.title}
                       fill
                       sizes="(max-width: 1024px) 100vw, 50vw"
@@ -66,7 +50,7 @@ export function Differentiators() {
                     <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-navy-950)]/30 to-transparent" />
                   </div>
                   <div className="absolute -bottom-4 -right-4 w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-[var(--color-blue-600)] grid place-items-center text-white shadow-lg shadow-blue-600/30">
-                    {d.icon}
+                    {ICONS[i]}
                   </div>
                 </div>
               </Reveal>

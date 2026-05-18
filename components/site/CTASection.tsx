@@ -4,13 +4,14 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, Phone, Mail, Clock3 } from 'lucide-react';
 import { Reveal } from './Reveal';
+import { useLanguage } from './LanguageProvider';
 
 export function CTASection({
-  eyebrow = 'Ready to get started?',
-  title = 'Build your workforce faster, safer, and smarter.',
-  description = 'From sourcing to compliance to global hiring, all in one place. We reply within 5 to 10 minutes.',
-  primary = { label: 'Hire workers', href: '/contact?intent=workforce' },
-  secondary = { label: 'Apply for a job', href: '/contact?intent=apply' },
+  eyebrow,
+  title,
+  description,
+  primary,
+  secondary,
 }: {
   eyebrow?: string;
   title?: string;
@@ -18,6 +19,14 @@ export function CTASection({
   primary?: { label: string; href: string };
   secondary?: { label: string; href: string };
 }) {
+  const { t } = useLanguage();
+
+  const resolvedEyebrow = eyebrow ?? t.cta.defaultEyebrow;
+  const resolvedTitle = title ?? t.cta.defaultTitle;
+  const resolvedDesc = description ?? t.cta.defaultDescription;
+  const resolvedPrimary = primary ?? { label: t.cta.defaultPrimary, href: '/contact?intent=workforce' };
+  const resolvedSecondary = secondary ?? { label: t.cta.defaultSecondary, href: '/contact?intent=apply' };
+
   return (
     <section className="relative overflow-hidden">
       <div className="absolute inset-0">
@@ -36,33 +45,33 @@ export function CTASection({
             <Reveal>
               <div className="inline-flex items-center gap-2 text-[12px] font-semibold tracking-[0.18em] uppercase text-blue-300">
                 <span className="w-8 h-px bg-blue-300/60" />
-                {eyebrow}
+                {resolvedEyebrow}
               </div>
             </Reveal>
             <Reveal delay={0.05}>
               <h2 className="headline mt-5 text-[28px] sm:text-[42px] lg:text-[52px] leading-[1.06] font-bold text-white">
-                {title}
+                {resolvedTitle}
               </h2>
             </Reveal>
             <Reveal delay={0.12}>
               <p className="mt-5 text-[15.5px] sm:text-[18px] leading-relaxed text-white/80 max-w-xl">
-                {description}
+                {resolvedDesc}
               </p>
             </Reveal>
             <Reveal delay={0.2}>
               <div className="mt-8 sm:mt-10 flex flex-wrap gap-3 sm:gap-4">
                 <Link
-                  href={primary.href}
+                  href={resolvedPrimary.href}
                   className="group inline-flex items-center gap-2.5 bg-white text-[var(--color-blue-700)] text-[14.5px] sm:text-[15px] font-semibold px-6 sm:px-7 py-3.5 sm:py-4 rounded-lg hover:bg-blue-50 transition-all duration-300 shadow-lg"
                 >
-                  {primary.label}
+                  {resolvedPrimary.label}
                   <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
                 </Link>
                 <Link
-                  href={secondary.href}
+                  href={resolvedSecondary.href}
                   className="group inline-flex items-center gap-2.5 border-2 border-white/30 text-white text-[14.5px] sm:text-[15px] font-semibold px-6 sm:px-7 py-3.5 sm:py-4 rounded-lg hover:bg-white/10 hover:border-white/50 transition-all duration-300"
                 >
-                  {secondary.label}
+                  {resolvedSecondary.label}
                   <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
                 </Link>
               </div>
@@ -74,21 +83,21 @@ export function CTASection({
               <div className="rounded-2xl border border-white/15 bg-white/10 backdrop-blur-sm p-6 sm:p-7 lg:p-8">
                 <div className="flex items-center gap-2 text-[12px] sm:text-[13px] font-semibold tracking-[0.16em] uppercase text-blue-300 mb-5 sm:mb-6">
                   <Clock3 size={14} />
-                  Response Promise
+                  {t.cta.responsePromise}
                 </div>
                 <p className="text-[15px] sm:text-[16px] leading-relaxed text-white/85">
-                  We reply to inbound requests within{' '}
-                  <span className="text-white font-bold text-[17px] sm:text-[18px]">5 to 10 minutes</span>{' '}
-                  during business hours.
+                  {t.cta.replyBody}{' '}
+                  <span className="text-white font-bold text-[17px] sm:text-[18px]">{t.cta.replyBold}</span>{' '}
+                  {t.cta.replySuffix}
                 </p>
                 <div className="mt-6 space-y-3 pt-5 sm:pt-6 border-t border-white/15">
                   <div className="flex items-center gap-3 text-[13.5px] sm:text-[14px] text-white/80">
                     <Phone size={15} className="text-blue-300" />
-                    <span>Call us directly for urgent requests</span>
+                    <span>{t.cta.callDirect}</span>
                   </div>
                   <div className="flex items-center gap-3 text-[13.5px] sm:text-[14px] text-white/80">
                     <Mail size={15} className="text-blue-300" />
-                    <span>Or send a quick message online</span>
+                    <span>{t.cta.sendMessage}</span>
                   </div>
                 </div>
               </div>

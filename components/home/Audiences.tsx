@@ -5,26 +5,12 @@ import Image from 'next/image';
 import { ArrowRight, Briefcase, Users, CheckCircle2 } from 'lucide-react';
 import { Container, Section } from '@/components/site/Section';
 import { Reveal } from '@/components/site/Reveal';
-
-const EMPLOYER_BENEFITS = [
-  'Workers on site in as little as 48 hours',
-  'Pre-vetted, certified, ready to start',
-  'Compliance handled, so liability stays low',
-  'One single partner instead of three or four vendors',
-  'Scales across healthcare and industrial roles',
-  'Global hiring support when you need it',
-];
-
-const CANDIDATE_BENEFITS = [
-  'Real jobs in healthcare, industrial, trades, and logistics',
-  'Help with certifications and background paperwork',
-  'Connections to U.S.-licensed immigration attorneys',
-  'Visa-path support for EB-2, EB-3, TN, and EB-5',
-  'Real career growth with serious employers',
-  'A clear process, no run-around',
-];
+import { useLanguage } from '@/components/site/LanguageProvider';
 
 export function Audiences() {
+  const { t } = useLanguage();
+  const { employer, candidate } = t.audiences;
+
   return (
     <Section tone="white">
       <Container className="py-20 sm:py-24 lg:py-32">
@@ -32,19 +18,18 @@ export function Audiences() {
           <Reveal>
             <div className="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.16em] uppercase text-[var(--color-blue-600)]">
               <span className="w-6 h-px bg-[var(--color-blue-600)]" />
-              Built for both sides
+              {t.audiences.eyebrow}
             </div>
           </Reveal>
           <Reveal delay={0.05}>
             <h2 className="headline mt-4 text-[28px] sm:text-[40px] lg:text-[48px] leading-[1.06] font-bold text-[var(--color-ink-900)]">
-              One platform.{' '}
-              <span className="text-[var(--color-blue-600)]">Two journeys.</span>
+              {t.audiences.title}{' '}
+              <span className="text-[var(--color-blue-600)]">{t.audiences.titleAccent}</span>
             </h2>
           </Reveal>
           <Reveal delay={0.1}>
             <p className="mt-4 text-[15.5px] sm:text-[17px] leading-relaxed text-[var(--color-ink-600)]">
-              Hiring? Reach out and we will bring the right people. Job hunting? Apply, and we will
-              walk you through the steps.
+              {t.audiences.body}
             </p>
           </Reveal>
         </div>
@@ -67,18 +52,17 @@ export function Audiences() {
                     <Briefcase size={22} className="text-white" />
                   </div>
                   <span className="text-[12px] font-semibold tracking-[0.16em] uppercase text-blue-200">
-                    For Employers
+                    {employer.tag}
                   </span>
                 </div>
                 <h3 className="headline text-[24px] sm:text-[30px] font-bold leading-tight">
-                  Need to hire? Reach out and we move fast.
+                  {employer.title}
                 </h3>
                 <p className="mt-3 text-[14.5px] sm:text-[15px] leading-relaxed text-white/80">
-                  Tell us the role and the timeline. We bring qualified, compliant people to your
-                  door, often within 48 hours.
+                  {employer.body}
                 </p>
                 <ul className="mt-6 sm:mt-7 space-y-3.5">
-                  {EMPLOYER_BENEFITS.map((b) => (
+                  {employer.benefits.map((b) => (
                     <li key={b} className="flex items-start gap-3 text-[14px] sm:text-[14.5px] text-white/85">
                       <CheckCircle2 size={16} className="text-blue-300 flex-none mt-0.5" />
                       <span>{b}</span>
@@ -90,14 +74,14 @@ export function Audiences() {
                     href="/contact?intent=workforce"
                     className="group/btn inline-flex items-center gap-2 bg-white text-[var(--color-blue-700)] text-[14px] sm:text-[14.5px] font-semibold px-5 sm:px-6 py-3.5 rounded-lg hover:bg-blue-50 transition-all duration-300 shadow-lg"
                   >
-                    Reach out to hire
+                    {employer.cta}
                     <ArrowRight size={15} className="transition-transform duration-300 group-hover/btn:translate-x-0.5" />
                   </Link>
                   <Link
                     href="/for-employers"
                     className="inline-flex items-center gap-2 text-[14px] font-semibold text-white/90 hover:text-white px-2 sm:px-3 py-3.5 transition-colors"
                   >
-                    Learn more <ArrowRight size={14} />
+                    {employer.learn} <ArrowRight size={14} />
                   </Link>
                 </div>
               </div>
@@ -111,18 +95,17 @@ export function Audiences() {
                   <Users size={22} />
                 </div>
                 <span className="text-[12px] font-semibold tracking-[0.16em] uppercase text-[var(--color-blue-600)]">
-                  For Candidates
+                  {candidate.tag}
                 </span>
               </div>
               <h3 className="headline text-[24px] sm:text-[30px] font-bold leading-tight text-[var(--color-ink-900)]">
-                Looking for a job? Apply in a few minutes.
+                {candidate.title}
               </h3>
               <p className="mt-3 text-[14.5px] sm:text-[15px] leading-relaxed text-[var(--color-ink-600)]">
-                Tell us what kind of work you want and the certifications you have. We share open
-                roles and walk you through every step.
+                {candidate.body}
               </p>
               <ul className="mt-6 sm:mt-7 space-y-3.5">
-                {CANDIDATE_BENEFITS.map((b) => (
+                {candidate.benefits.map((b) => (
                   <li key={b} className="flex items-start gap-3 text-[14px] sm:text-[14.5px] text-[var(--color-ink-700)]">
                     <CheckCircle2 size={16} className="text-[var(--color-blue-500)] flex-none mt-0.5" />
                     <span>{b}</span>
@@ -134,14 +117,14 @@ export function Audiences() {
                   href="/contact?intent=apply"
                   className="group/btn inline-flex items-center gap-2 bg-[var(--color-blue-600)] text-white text-[14px] sm:text-[14.5px] font-semibold px-5 sm:px-6 py-3.5 rounded-lg hover:bg-[var(--color-blue-700)] transition-all duration-300 shadow-lg shadow-blue-600/20"
                 >
-                  Apply for a job
+                  {candidate.cta}
                   <ArrowRight size={15} className="transition-transform duration-300 group-hover/btn:translate-x-0.5" />
                 </Link>
                 <Link
                   href="/for-candidates"
                   className="inline-flex items-center gap-2 text-[14px] font-semibold text-[var(--color-ink-700)] hover:text-[var(--color-ink-900)] px-2 sm:px-3 py-3.5 transition-colors"
                 >
-                  Learn more <ArrowRight size={14} />
+                  {candidate.learn} <ArrowRight size={14} />
                 </Link>
               </div>
             </article>

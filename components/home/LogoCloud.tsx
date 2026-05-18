@@ -1,27 +1,22 @@
 'use client';
 
 import { Reveal } from '@/components/site/Reveal';
-
-const PARTNERS = [
-  { name: 'Pearson VUE', desc: 'Authorized Testing Center' },
-  { name: 'TWIC', desc: 'Adjacent Talent Pipeline' },
-  { name: 'Healthcare', desc: 'Clinical Staffing' },
-  { name: 'Industrial', desc: 'Plant & Port Operations' },
-  { name: 'Immigration', desc: 'EB-2 NIW & TN Visa' },
-  { name: 'Compliance', desc: 'Built-In Credentialing' },
-];
+import { useLanguage } from '@/components/site/LanguageProvider';
 
 export function LogoCloud() {
+  const { t } = useLanguage();
+  const partners = t.logoCloud.partners;
+
   return (
     <section className="bg-white border-b border-[var(--color-ink-100)]">
       <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8 py-12 sm:py-14">
         <Reveal>
           <p className="text-[11px] sm:text-[12px] font-semibold tracking-[0.22em] uppercase text-[var(--color-ink-400)] text-center mb-7 sm:mb-8">
-            Trusted by leading healthcare systems and industrial operators
+            {t.logoCloud.trusted}
           </p>
         </Reveal>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6">
-          {PARTNERS.map((p, i) => (
+          {partners.map((p, i) => (
             <Reveal key={p.name} delay={i * 0.06}>
               <div className="flex flex-col items-center gap-2 py-4 px-3 rounded-xl hover:bg-[var(--color-ink-50)] transition-colors duration-300 cursor-default">
                 <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-[var(--color-blue-50)] border border-[var(--color-blue-100)] grid place-items-center">
