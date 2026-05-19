@@ -10,8 +10,8 @@ import { Logo } from './Logo';
 import { useLanguage } from './LanguageProvider';
 
 // ─── Heights must match the header's h-16 / lg:h-[72px] ─────────────────────
-export const HEADER_H_PX    = 64;
-export const HEADER_H_LG_PX = 72;
+export const HEADER_H_PX    = 72;
+export const HEADER_H_LG_PX = 80;
 
 // Build PRIMARY_NAV dynamically from translations
 function buildNav(t: ReturnType<typeof useLanguage>['t']) {

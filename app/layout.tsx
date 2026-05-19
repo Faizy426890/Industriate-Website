@@ -5,6 +5,7 @@ import { Header } from '@/components/site/Header';
 import { Footer } from '@/components/site/Footer';
 import { StickyCTA } from '@/components/site/StickyCTA';
 import { LanguageProvider } from '@/components/site/LanguageProvider';
+import { ChatBot } from '@/components/site/ChatBot';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -71,6 +72,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Footer />
           </div>
           <StickyCTA />
+          <ChatBot />
         </LanguageProvider>
       </body>
     </html>
