@@ -166,6 +166,7 @@ export function ChatBot() {
   const [isLoading, setIsLoading] = useState(false);
   const [unread, setUnread]       = useState(0);
   const [showScrollBtn, setShowScrollBtn] = useState(false);
+  const [labelVisible, setLabelVisible]   = useState(true);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const messagesBoxRef = useRef<HTMLDivElement>(null);
@@ -192,9 +193,16 @@ export function ChatBot() {
   }, []);
 
   // ── Open / close ─────────────────────────────────────────────────────────────
+  // Auto-hide label after 6 s
+  useEffect(() => {
+    const t = setTimeout(() => setLabelVisible(false), 6000);
+    return () => clearTimeout(t);
+  }, []);
+
   const open = () => {
     setIsOpen(true);
     setUnread(0);
+    setLabelVisible(false);
     setTimeout(() => inputRef.current?.focus(), 350);
   };
   const close = () => { setIsOpen(false); setIsExpanded(false); };
@@ -273,49 +281,162 @@ export function ChatBot() {
 
   return (
     <>
-      {/* ── Floating Trigger Button ───────────────────────────────────────────── */}
+      {/* ── Floating Trigger Button + Label ──────────────────────────────────── */}
       <div
         className="fixed z-[9998]"
         style={{ bottom: '24px', right: '24px' }}
       >
         <AnimatePresence>
           {!isOpen && (
-            <motion.button
-              key="trigger"
-              initial={{ scale: 0, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0, opacity: 0 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 22 }}
-              whileHover={{ scale: 1.08 }}
-              whileTap={{ scale: 0.94 }}
-              onClick={open}
-              aria-label="Open chat assistant"
-              className="relative flex items-center justify-center rounded-full shadow-2xl"
-              style={{
-                width: 60,
-                height: 60,
-                background: 'linear-gradient(135deg, #1d4ed8 0%, #0ea5e9 100%)',
-                boxShadow: '0 8px 32px rgba(29,78,216,0.45), 0 2px 8px rgba(0,0,0,0.3)',
-              }}
-            >
-              {/* Pulse ring */}
-              <motion.span
-                className="absolute inset-0 rounded-full"
-                animate={{ scale: [1, 1.35, 1], opacity: [0.5, 0, 0.5] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
-                style={{ background: 'rgba(29,78,216,0.4)', pointerEvents: 'none' }}
-              />
-              <MessageCircle size={26} className="text-white" strokeWidth={2} />
-              {unread > 0 && (
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center border-2 border-white"
-                >
-                  {unread > 9 ? '9+' : unread}
-                </motion.div>
-              )}
-            </motion.button>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '10px' }}>
+
+              {/* ── Floating Label ─────────────────────────────────────────────── */}
+              <AnimatePresence>
+                {labelVisible && (
+                  <motion.div
+                    key="label"
+                    initial={{ opacity: 0, y: 10, scale: 0.92 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 6, scale: 0.94 }}
+                    transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                    style={{ position: 'relative', cursor: 'pointer' }}
+                    onClick={open}
+                  >
+                    {/* Card */}
+                    <div
+                      style={{
+                        background: 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%)',
+                        borderRadius: '14px',
+                        padding: '11px 14px',
+                        boxShadow: '0 8px 32px rgba(0,0,0,0.28), 0 2px 8px rgba(0,0,0,0.18), 0 0 0 1px rgba(255,255,255,0.07)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '10px',
+                        width: 'max-content',
+                        maxWidth: 'calc(100vw - 56px)',
+                      }}
+                    >
+                      {/* Live dot */}
+                      <span style={{ position: 'relative', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+                        <motion.span
+                          animate={{ scale: [1, 1.8, 1], opacity: [0.6, 0, 0.6] }}
+                          transition={{ duration: 2, repeat: Infinity }}
+                          style={{
+                            position: 'absolute',
+                            inset: -3,
+                            borderRadius: '50%',
+                            background: 'rgba(52,211,153,0.4)',
+                          }}
+                        />
+                        <span
+                          style={{
+                            width: 7,
+                            height: 7,
+                            borderRadius: '50%',
+                            background: '#34d399',
+                            display: 'block',
+                            position: 'relative',
+                          }}
+                        />
+                      </span>
+
+                      {/* Text */}
+                      <div>
+                        <p style={{ margin: 0, fontSize: '12.5px', fontWeight: 700, color: '#fff', letterSpacing: '0.01em', lineHeight: 1.3 }}>
+                          INDUSTRITAS AI
+                        </p>
+                        <p style={{ margin: 0, fontSize: '11px', color: 'rgba(255,255,255,0.5)', fontWeight: 400, lineHeight: 1.3 }}>
+                          Ask me anything · I reply instantly
+                        </p>
+                      </div>
+
+                      {/* Dismiss × */}
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setLabelVisible(false); }}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          padding: '2px',
+                          cursor: 'pointer',
+                          color: 'rgba(255,255,255,0.3)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          lineHeight: 1,
+                          fontSize: '14px',
+                          marginLeft: '2px',
+                          flexShrink: 0,
+                        }}
+                        aria-label="Dismiss"
+                      >
+                        ×
+                      </button>
+                    </div>
+
+                    {/* Speech-bubble tail */}
+                    <div
+                      style={{
+                        position: 'absolute',
+                        bottom: -7,
+                        right: 24,
+                        width: 14,
+                        height: 8,
+                        overflow: 'hidden',
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: 14,
+                          height: 14,
+                          background: '#1e1b4b',
+                          transform: 'rotate(45deg)',
+                          transformOrigin: 'top left',
+                          boxShadow: '2px 2px 4px rgba(0,0,0,0.2)',
+                        }}
+                      />
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* ── Chat Button ─────────────────────────────────────────────────── */}
+              <motion.button
+                key="trigger"
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0, opacity: 0 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+                whileHover={{ scale: 1.08 }}
+                whileTap={{ scale: 0.94 }}
+                onClick={open}
+                aria-label="Open chat assistant"
+                className="relative flex items-center justify-center rounded-full shadow-2xl"
+                style={{
+                  width: 60,
+                  height: 60,
+                  background: 'linear-gradient(135deg, #1d4ed8 0%, #0ea5e9 100%)',
+                  boxShadow: '0 8px 32px rgba(29,78,216,0.45), 0 2px 8px rgba(0,0,0,0.3)',
+                  alignSelf: 'flex-end',
+                }}
+              >
+                <motion.span
+                  className="absolute inset-0 rounded-full"
+                  animate={{ scale: [1, 1.35, 1], opacity: [0.5, 0, 0.5] }}
+                  transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+                  style={{ background: 'rgba(29,78,216,0.4)', pointerEvents: 'none' }}
+                />
+                <MessageCircle size={26} className="text-white" strokeWidth={2} />
+                {unread > 0 && (
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center border-2 border-white"
+                  >
+                    {unread > 9 ? '9+' : unread}
+                  </motion.div>
+                )}
+              </motion.button>
+
+            </div>
           )}
         </AnimatePresence>
       </div>
