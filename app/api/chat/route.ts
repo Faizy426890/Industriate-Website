@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const GEMINI_API_KEY =
-  process.env.GEMINI_API_KEY || 'AQ.Ab8RN6J6SfQ3MzmbqZaIQZB9jvCFWb3WFkDqiSTAXob7uenHiA';
+  process.env.GEMINI_API_KEY;
 
 // Try these combinations in order: [apiVersion, modelName]
 const GEMINI_TARGETS: [string, string][] = [
